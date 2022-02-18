@@ -1,43 +1,130 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-  <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE"/>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <title>Teamwork</title>
 
-  <link rel=stylesheet href="platform.css" type="text/css">
-  <link rel=stylesheet href="libs/jquery/dateField/jquery.dateField.css" type="text/css">
+<!-- Seção de inclusão das Bibliotecas --> 
+<script src="https://iexpress.ingty.com/MyLib/libs/jquery/jquery-2.1.1.min.js"></script>
+<script src="https://iexpress.ingty.com/MyLib/libs/js/underscore-min.js" type="text/javascript"></script>
 
-  <link rel=stylesheet href="gantt.css" type="text/css">
-  <link rel=stylesheet href="ganttPrint.css" type="text/css" media="print">
-  <link rel=stylesheet href="libs/jquery/valueSlider/mb.slider.css" type="text/css" media="print">
+<script type="text/javascript" src="https://iexpress.ingty.com/MyLib/libs/jquery/jquery-ui.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://iexpress.ingty.com/MyLib/libs/jquery/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="https://iexpress.ingty.com/MyLib/libs/jquery/jquery.multiselect.css">
 
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<!-- <script src="https://iexpress.ingty.com/MyLib/libs/bootstrap3/js/bootstrap.min.js"></script> 
+<link  href="https://iexpress.ingty.com/MyLib/libs/bootstrap3/css/bootstrap.min.css" rel="stylesheet" /> -->
 
-  <script src="libs/jquery/jquery.livequery.1.1.1.min.js"></script>
-  <script src="libs/jquery/jquery.timers.js"></script>
+<link rel="stylesheet" type="text/css" href="https://iexpress.ingty.com/MyLib/libs/dataTables/datatables.min.css">
 
-  <script src="libs/utilities.js"></script>
-  <script src="libs/forms.js"></script>
-  <script src="libs/date.js"></script>
-  <script src="libs/dialogs.js"></script>
-  <script src="libs/layout.js"></script>
-  <script src="libs/i18nJs.js"></script>
-  <script src="libs/jquery/dateField/jquery.dateField.js"></script>
-  <script src="libs/jquery/JST/jquery.JST.js"></script>
-  <script src="libs/jquery/valueSlider/jquery.mb.slider.js"></script>
+<script type="text/javascript" src="https://iexpress.ingty.com/MyLib/libs/dataTables/datatables.min.js"></script>  
+<script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.12/sorting/date-euro.js"></script>
+<script type="text/javascript" src="https://iexpress.ingty.com/MyLib/libs/dataTables/dataTables.rowsGroup.js"></script>
+<script type="text/javascript" src="https://iexpress.ingty.com/MyLib/libs/dataTables/dataTables.treeGrid.js"></script>
+<!-- <script type="text/javascript" src="https://iexpress.ingty.com/MyLib/libs/dataTables/ColReorderWithResize.js"></script> -->
+<script type="text/javascript" src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
 
-  <script type="text/javascript" src="libs/jquery/svg/jquery.svg.min.js"></script>
-  <script type="text/javascript" src="libs/jquery/svg/jquery.svgdom.1.8.js"></script>
+<link rel="stylesheet" type="text/css" href="https://iexpress.ingty.com/MyLib/libs/bootstrap/4.4.1/bootstrapcustom.min.css">
+
+<script type="text/javascript" src="https://iexpress.ingty.com/MyLib/libs/pdfmake/pdfmake.min.js"></script> 
+<script type="text/javascript" src="https://iexpress.ingty.com/MyLib/libs/pdfmake/vfs_fonts.js"></script> 
+<script type="text/javascript" src="https://iexpress.ingty.com/MyLib/libs/pdfmake/html2pdfmake.js"></script> 
+
+<script type="text/javascript" src="https://iexpress.ingty.com/MyLib/libs/dataTables/cfgIngty.js"></script> 
+
+<!-- pdfmake files: -->
+<script type="text/javascript" src="https://iexpress.ingty.com/MyLib/libs/pdfmake/pdfmake.min.js"></script> 
+<script type="text/javascript" src="https://iexpress.ingty.com/MyLib/libs/pdfmake/vfs_fonts.js"></script> 
+<script type="text/javascript" src="https://iexpress.ingty.com/MyLib/libs/pdfmake/html2pdfmake.js"></script> 
+
+<script src="https://iexpress.ingty.com/MyLib/libs/moment/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment-recur/1.0.7/moment-recur.js"></script>
+<script src="https://iexpress.ingty.com/MyLib/libs/moment/locale/pt-br.js"></script>
+
+<script src="https://iexpress.ingty.com/MyLib/libs/numeral/numeral.min.js" type="text/javascript"></script>
+<script src="https://iexpress.ingty.com/MyLib/libs/numeral/locales/pt-br.min.js" type="text/javascript"></script>
+
+<link rel="stylesheet" type="text/css" href="https://iexpress.ingty.com/MyLib/libs/keen-dataviz/keen-dashboards.css">
+<link rel="stylesheet" type="text/css" href="https://iexpress.ingty.com/MyLib/libs/keen-dataviz/dashboard.css">
+
+<link rel="Stylesheet" type="text/css" href="https://iexpress.ingty.com/MyLib/libs/js/wSelect.css" />
+<script type="text/javascript" src="https://iexpress.ingty.com/MyLib/libs/js/wSelect.min.js"></script>
+
+<!--link rel="stylesheet" type="text/css" href="https://iexpress.ingty.com/MyLib/libs/vis/vis.min.css">
+<script type="text/javascript" src="https://iexpress.ingty.com/MyLib/libs/vis/vis.min.js"></script!-->
+<script src="https://iexpress.ingty.com/MyLib/libs/vis/vis-timeline-graph2d.min.js"></script>
+<link href="https://iexpress.ingty.com/MyLib/libs/vis/vis-timeline-graph2d.min.css" rel="stylesheet" type="text/css" />
 
 
-  <script src="ganttUtilities.js"></script>
-  <script src="ganttTask.js"></script>
-  <script src="ganttDrawerSVG.js"></script>
-  <script src="ganttZoom.js"></script>
-  <script src="ganttGridEditor.js"></script>
-  <script src="ganttMaster.js"></script>  
+<script src="https://iexpress.ingty.com/MyLib/libs/js/echarts.min.js" type="text/javascript"></script>
+<script src="https://iexpress.ingty.com/MyLib/libs/js/echarts-gl.min.js" type="text/javascript"></script>
+
+<script src="https://iexpress.ingty.com/MyLib/libs/js/datajs-1.1.2.js" type="text/javascript"></script>
+<script src="https://iexpress.ingty.com/MyLib/libs/js/Common.js" type="text/javascript"></script>
+<script src="https://iexpress.ingty.com/MyLib/libs/js/oDataPS.js" type="text/javascript"></script>
+
+<script src="https://iexpress.ingty.com/MyLib/libs/SPServices/jquery.SPServices.min.js" type="text/javascript"></script>
+<script src="https://iexpress.ingty.com/MyLib/libs/SharepointPlus/sharepointplus.js" type="text/javascript"></script>
+
+<script type="text/javascript" src="https://iexpress.ingty.com/MyLib/libs/js/bootstrap-notify.js" ></script>
+<link rel="stylesheet" type="text/css" href="https://iexpress.ingty.com/MyLib/libs/js/animate.min.css">
+<link rel="stylesheet" type="text/css" href="https://iexpress.ingty.com/MyLib/libs/js/bootstrap-notify.css">
+
+<script type="text/javascript" src="https://iexpress.ingty.com/MyLib/libs/jquery/jquery-confirm.min.js" ></script>
+<link rel="stylesheet" type="text/css" href="https://iexpress.ingty.com/MyLib/libs/jquery/jquery-confirm.min.css">
+
+
+<!--<link rel="stylesheet" href="https://iexpress.ingty.com/MyLib/libs/fontawesome-free-5.13.0-web/css/all.css"> 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
+
+<link rel="stylesheet" href="https://iexpress.ingty.com/MyLib/libs/newSlickGrid/styles/css/slickgrid-theme-salesforce.css" type="text/css"/>
+
+<script src="https://ingty.sharepoint.com/sites/pwa_dev/MyLib/iexpress/libs/ingtyLog.js?_ver=DDMMAAAA.HHMM" type="text/javascript"></script> 
+<script src="https://ingty.sharepoint.com/sites/pwa_dev/MyLib/iexpress/libs/cfg.js?_ver=DDMMAAAA.HHMM" type="text/javascript"></script> 
+<script src="https://ingty.sharepoint.com/sites/pwa_dev/MyLib/iexpress/libs/DAL_sp.js?_ver=DDMMAAAA.HHMM" type="text/javascript"></script> 
+
+
+
+<script src="https://iexpress.ingty.com/MyLib/libs/select/comboTreePlugin.js"  type="text/javascript"></script>
+<link rel="stylesheet" href="https://iexpress.ingty.com/MyLib/libs/select/style.css">
+
+
+
+
+
+
+
+  <link rel=stylesheet href="https://iexpress.ingty.com/MyLib/libs/jQueryGantt/platform.css" type="text/css">
+  <link rel=stylesheet href="https://iexpress.ingty.com/MyLib/libs/jQueryGantt/libs/jquery/dateField/jquery.dateField.css" type="text/css">
+
+  <link rel=stylesheet href="https://iexpress.ingty.com/MyLib/libs/jQueryGantt/gantt-ingty.css" type="text/css">
+  <link rel=stylesheet href="https://iexpress.ingty.com/MyLib/libs/jQueryGantt/ganttPrint.css" type="text/css" media="print">
+  <link rel=stylesheet href="https://iexpress.ingty.com/MyLib/libs/jQueryGantt/libs/jquery/valueSlider/mb.slider.css" type="text/css" media="print">
+
+  <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script> -->
+
+  <script src="https://iexpress.ingty.com/MyLib/libs/jQueryGantt/libs/jquery/jquery.livequery.1.1.1.min.js"></script>
+  <script src="https://iexpress.ingty.com/MyLib/libs/jQueryGantt/libs/jquery/jquery.timers.js"></script>
+
+  <script src="https://iexpress.ingty.com/MyLib/libs/jQueryGantt/libs/utilities.js"></script>
+  <script src="https://iexpress.ingty.com/MyLib/libs/jQueryGantt/libs/forms.js"></script>
+  <script src="https://iexpress.ingty.com/MyLib/libs/jQueryGantt/libs/date.js"></script>
+  <script src="https://iexpress.ingty.com/MyLib/libs/jQueryGantt/libs/dialogs.js"></script>
+  <script src="https://iexpress.ingty.com/MyLib/libs/jQueryGantt/libs/layout.js"></script>
+  <script src="https://iexpress.ingty.com/MyLib/libs/jQueryGantt/libs/i18nJs-pt_br.js"></script>
+  <script src="https://iexpress.ingty.com/MyLib/libs/jQueryGantt/libs/jquery/dateField/jquery.dateField.js"></script>
+  <script src="https://iexpress.ingty.com/MyLib/libs/jQueryGantt/libs/jquery/JST/jquery.JST.js"></script>
+  <script src="https://iexpress.ingty.com/MyLib/libs/jQueryGantt/libs/jquery/valueSlider/jquery.mb.slider.js"></script>
+
+  <script type="text/javascript" src="https://iexpress.ingty.com/MyLib/libs/jQueryGantt/libs/jquery/svg/jquery.svg.min.js"></script>
+  <script type="text/javascript" src="https://iexpress.ingty.com/MyLib/libs/jQueryGantt/libs/jquery/svg/jquery.svgdom.1.8.js"></script>
+
+  <script src="https://iexpress.ingty.com/MyLib/libs/jQueryGantt/ganttUtilities.js"></script>
+  <script src="https://iexpress.ingty.com/MyLib/libs/jQueryGantt/ganttTask.js"></script>
+  <script src="https://iexpress.ingty.com/MyLib/libs/jQueryGantt/ganttDrawerSVG.js"></script>
+  <script src="https://iexpress.ingty.com/MyLib/libs/jQueryGantt/ganttZoom.js"></script>
+  <script src="https://iexpress.ingty.com/MyLib/libs/jQueryGantt/ganttGridEditor.js"></script>
+  <script src="https://iexpress.ingty.com/MyLib/libs/jQueryGantt/ganttMaster.js"></script>  
 
 
   <!--<script src="libs/profiling.js"></script>-->
@@ -46,9 +133,7 @@
 <body style="background-color: #fff;">
 
 
-<div id="ndo" style="position:absolute;right:5px;top:5px;width:378px;padding:5px;background-color: #FFF5E6; border:1px solid #F9A22F; font-size:12px" class="noprint">
-  This Gantt editor is free thanks to <a href="http://twproject.com" target="_blank">Twproject</a> where it can be used on a complete and flexible project management solution.<br> Get your projects done! Give <a href="http://twproject.com" target="_blank">Twproject a try now</a>.
-</div>
+
 <div id="workSpace" style="padding:0px; overflow-y:auto; overflow-x:hidden;border:1px solid #e5e5e5;position:relative;margin:0 5px"></div>
 
 <style>
@@ -76,24 +161,25 @@
 
 </style>
 
-<form id="gimmeBack" style="display:none;" action="../gimmeBack.jsp" method="post" target="_blank"><input type="hidden" name="prj" id="gimBaPrj"></form>
+<!-- <fo rm id="gimmeBack" style="display:none;" action="../gimmeBack.jsp" method="post" target="_blank"><input type="hidden" name="prj" id="gimBaPrj"></fo rm> -->
 
 <script type="text/javascript">
-
+//https://roberto.twproject.com/2012/08/24/jquery-gantt-editor/
 var ge;
 $(function() {
-  var canWrite=true; //this is the default for test purposes
+  var canWrite=true; //Este é o padrão para fins de teste
 
-  // here starts gantt initialization
+  // Aqui começa a inicialização do Gantt
   ge = new GanttMaster();
   ge.set100OnClose=true;
+  ge.resourceUrl = 'https://iexpress.ingty.com/MyLib/libs/jQueryGantt/res/';
 
   ge.shrinkParent=true;
 
   ge.init($("#workSpace"));
-  loadI18n(); //overwrite with localized ones
+  loadI18n(); //substituir com os localizados
 
-  //in order to force compute the best-fitting zoom level
+  //A fim de forçar a calcular o nível de zoom mais adequado
   delete ge.gantt.zoom;
 
   var project=loadFromLocalStorage();
@@ -102,9 +188,9 @@ $(function() {
     $(".ganttButtonBar button.requireWrite").attr("disabled","true");
 
   ge.loadProject(project);
-  ge.checkpoint(); //empty the undo stack
+  ge.checkpoint(); //esvazie a pilha de desfazer
 
-  initializeHistoryManagement(ge.tasks[0].id);
+  //initializeHistoryManagement(ge.tasks[0].id);
 });
 
 
@@ -112,14 +198,35 @@ $(function() {
 function getDemoProject(){
   //console.debug("getDemoProject")
 ret= {"tasks":    [
-      {"id": -1, "name": "Gantt editor", "progress": 0, "progressByWorklog": false, "relevance": 0, "type": "", "typeId": "", "description": "", "code": "", "level": 0, "status": "STATUS_ACTIVE", "depends": "", "canWrite": true, "start": 1396994400000, "duration": 20, "end": 1399586399999, "startIsMilestone": false, "endIsMilestone": false, "collapsed": false, "assigs": [], "hasChild": true},
-      {"id": -2, "name": "coding", "progress": 0, "progressByWorklog": false, "relevance": 0, "type": "", "typeId": "", "description": "", "code": "", "level": 1, "status": "STATUS_ACTIVE", "depends": "", "canWrite": true, "start": 1396994400000, "duration": 10, "end": 1398203999999, "startIsMilestone": false, "endIsMilestone": false, "collapsed": false, "assigs": [], "hasChild": true},
-      {"id": -3, "name": "gantt part", "progress": 0, "progressByWorklog": false, "relevance": 0, "type": "", "typeId": "", "description": "", "code": "", "level": 2, "status": "STATUS_ACTIVE", "depends": "", "canWrite": true, "start": 1396994400000, "duration": 2, "end": 1397167199999, "startIsMilestone": false, "endIsMilestone": false, "collapsed": false, "assigs": [], "hasChild": false},
-      {"id": -4, "name": "editor part", "progress": 0, "progressByWorklog": false, "relevance": 0, "type": "", "typeId": "", "description": "", "code": "", "level": 2, "status": "STATUS_SUSPENDED", "depends": "3", "canWrite": true, "start": 1397167200000, "duration": 4, "end": 1397685599999, "startIsMilestone": false, "endIsMilestone": false, "collapsed": false, "assigs": [], "hasChild": false},
-      {"id": -5, "name": "testing", "progress": 0, "progressByWorklog": false, "relevance": 0, "type": "", "typeId": "", "description": "", "code": "", "level": 1, "status": "STATUS_SUSPENDED", "depends": "2:5", "canWrite": true, "start": 1398981600000, "duration": 5, "end": 1399586399999, "startIsMilestone": false, "endIsMilestone": false, "collapsed": false, "assigs": [], "hasChild": true},
-      {"id": -6, "name": "test on safari", "progress": 0, "progressByWorklog": false, "relevance": 0, "type": "", "typeId": "", "description": "", "code": "", "level": 2, "status": "STATUS_SUSPENDED", "depends": "", "canWrite": true, "start": 1398981600000, "duration": 2, "end": 1399327199999, "startIsMilestone": false, "endIsMilestone": false, "collapsed": false, "assigs": [], "hasChild": false},
-      {"id": -7, "name": "test on ie", "progress": 0, "progressByWorklog": false, "relevance": 0, "type": "", "typeId": "", "description": "", "code": "", "level": 2, "status": "STATUS_SUSPENDED", "depends": "6", "canWrite": true, "start": 1399327200000, "duration": 3, "end": 1399586399999, "startIsMilestone": false, "endIsMilestone": false, "collapsed": false, "assigs": [], "hasChild": false},
-      {"id": -8, "name": "test on chrome", "progress": 0, "progressByWorklog": false, "relevance": 0, "type": "", "typeId": "", "description": "", "code": "", "level": 2, "status": "STATUS_SUSPENDED", "depends": "6", "canWrite": true, "start": 1399327200000, "duration": 2, "end": 1399499999999, "startIsMilestone": false, "endIsMilestone": false, "collapsed": false, "assigs": [], "hasChild": false}
+      {"id": -1, 
+      "name": "Gantt editor", 
+      "progress": 0, 
+      "progressByWorklog": false, 
+      "relevance": 0, 
+      "type": "", 
+      "typeId": "", 
+      "description": "", 
+      "code": "", 
+      "level": 0, 
+      "status": "STATUS_ACTIVE", 
+      "depends": "", 
+      "canWrite": true, 
+      "start": 1396994400000, 
+      "entrega": false, 
+      "duration": 20, 
+      "end": 1399586399999, 
+      "startIsMilestone": true, 
+      "endIsMilestone": true, 
+      "collapsed": false, 
+      "assigs": [], 
+      "hasChild": true},
+      {"id": -2, "name": "coding", "progress": 0, "progressByWorklog": false, "relevance": 0, "type": "", "typeId": "", "description": "", "code": "", "level": 1, "status": "STATUS_ACTIVE", "depends": "", "canWrite": true, "start": 1396994400000, "entrega": false, "duration": 10, "end": 1398203999999, "startIsMilestone": false, "endIsMilestone": false, "collapsed": false, "assigs": [], "hasChild": true},
+      {"id": -3, "name": "gantt part", "progress": 0, "progressByWorklog": false, "relevance": 0, "type": "", "typeId": "", "description": "", "code": "", "level": 2, "status": "STATUS_ACTIVE", "depends": "", "canWrite": true, "start": 1396994400000, "entrega": true, "duration": 2, "end": 1397167199999, "startIsMilestone": false, "endIsMilestone": false, "collapsed": false, "assigs": [], "hasChild": false},
+      {"id": -4, "name": "editor part", "progress": 0, "progressByWorklog": false, "relevance": 0, "type": "", "typeId": "", "description": "", "code": "", "level": 2, "status": "STATUS_SUSPENDED", "depends": "3", "canWrite": true, "start": 1397167200000, "entrega": false, "duration": 4, "end": 1397685599999, "startIsMilestone": false, "endIsMilestone": false, "collapsed": false, "assigs": [], "hasChild": false},
+      {"id": -5, "name": "testing", "progress": 0, "progressByWorklog": false, "relevance": 0, "type": "", "typeId": "", "description": "", "code": "", "level": 1, "status": "STATUS_SUSPENDED", "depends": "2:5", "canWrite": true, "start": 1398981600000, "entrega": false, "duration": 5, "end": 1399586399999, "startIsMilestone": false, "endIsMilestone": false, "collapsed": false, "assigs": [], "hasChild": true},
+      {"id": -6, "name": "test on safari", "progress": 0, "progressByWorklog": false, "relevance": 0, "type": "", "typeId": "", "description": "", "code": "", "level": 2, "status": "STATUS_SUSPENDED", "depends": "", "canWrite": true, "start": 1398981600000, "entrega": false, "duration": 2, "end": 1399327199999, "startIsMilestone": false, "endIsMilestone": false, "collapsed": false, "assigs": [], "hasChild": false},
+      {"id": -7, "name": "test on ie", "progress": 0, "progressByWorklog": false, "relevance": 0, "type": "", "typeId": "", "description": "", "code": "", "level": 2, "status": "STATUS_SUSPENDED", "depends": "6", "canWrite": true, "start": 1399327200000, "entrega": true, "duration": 3, "end": 1399586399999, "startIsMilestone": false, "endIsMilestone": false, "collapsed": false, "assigs": [], "hasChild": false},
+      {"id": -8, "name": "test on chrome", "progress": 0, "progressByWorklog": false, "relevance": 0, "type": "", "typeId": "", "description": "", "code": "", "level": 2, "status": "STATUS_SUSPENDED", "depends": "6", "canWrite": true, "start": 1399327200000, "entrega": false, "duration": 2, "end": 1399499999999, "startIsMilestone": false, "endIsMilestone": false, "collapsed": false, "assigs": [], "hasChild": false}
     ], "selectedRow": 2, "deletedTaskIds": [],
       "resources": [
       {"id": "tmp_1", "name": "Resource 1"},
@@ -132,7 +239,12 @@ ret= {"tasks":    [
       {"id": "tmp_2", "name": "Worker"},
       {"id": "tmp_3", "name": "Stakeholder"},
       {"id": "tmp_4", "name": "Customer"}
-    ], "canWrite":    true, "canDelete":true, "canWriteOnParent": true, canAdd:true}
+    ], 
+    "canWrite":    true, 
+    "canDelete":true, 
+    "canWriteOnParent": true, 
+    "canAdd":true
+  }
 
 
     //actualize data
@@ -147,7 +259,7 @@ ret= {"tasks":    [
 
 function loadGanttFromServer(taskId, callback) {
 
-  //this is a simulation: load data from the local storage if you have already played with the demo or a textarea with starting demo data
+  //Esta é uma simulação: Carregue dados do armazenamento local, se você já tiver jogado com a demonstração ou uma textarea com dados de demonstração inicial
   var ret=loadFromLocalStorage();
 
   //this is the real implementation
@@ -195,11 +307,11 @@ function upload(uploadedFile) {
 function saveGanttOnServer() {
 
   //this is a simulation: save data to the local storage or to the textarea
-  //saveInLocalStorage();
+  saveInLocalStorage();
 
-  var prj = ge.saveProject();
+  //var prj = ge.saveProject();
 
-  download(JSON.stringify(prj, null, '\t'), "MyProject.json", "application/json");
+  //download(JSON.stringify(prj, null, '\t'), "MyProject.json", "application/json");
 
   /*
 
@@ -342,7 +454,7 @@ function editResources(){
           res.name=name;
         newRes.push(res);
       } else {
-        //remove assignments
+        //remove Atribuições
         for (var j=0;j<ge.tasks.length;j++){
           var task=ge.tasks[j];
           var newAss=[];
@@ -498,34 +610,32 @@ function showBaselineInfo (event,element){
 
 
 <div id="gantEditorTemplates" style="display:none;">
-<div class="__template__" type="GANTBUTTONS">
-  <!--
+<div class="__template__" type="GANTBUTTONS"><!-- 
   <div class="ganttButtonBar noprint">
     <div class="buttons">
-      <a href="https://gantt.twproject.com/"><img src="res/twGanttLogo.png" alt="Twproject" align="absmiddle" style="max-width: 136px; padding-right: 15px"></a>
 
-      <button onclick="$('#workSpace').trigger('undo.gantt');return false;" class="button textual icon requireCanWrite" title="undo"><span class="teamworkIcon">&#39;</span></button>
-      <button onclick="$('#workSpace').trigger('redo.gantt');return false;" class="button textual icon requireCanWrite" title="redo"><span class="teamworkIcon">&middot;</span></button>
+      <button onclick="$('#workSpace').trigger('undo.gantt');return false;" class="button textual icon requireCanWrite" title="Desfazer"><span class="teamworkIcon">&#39;</span></button>
+      <button onclick="$('#workSpace').trigger('redo.gantt');return false;" class="button textual icon requireCanWrite" title="Refazer"><span class="teamworkIcon">&middot;</span></button>
       <span class="ganttButtonSeparator requireCanWrite requireCanAdd"></span>
-      <button onclick="$('#workSpace').trigger('addAboveCurrentTask.gantt');return false;" class="button textual icon requireCanWrite requireCanAdd" title="insert above"><span class="teamworkIcon">l</span></button>
-      <button onclick="$('#workSpace').trigger('addBelowCurrentTask.gantt');return false;" class="button textual icon requireCanWrite requireCanAdd" title="insert below"><span class="teamworkIcon">X</span></button>
+      <button onclick="$('#workSpace').trigger('addAboveCurrentTask.gantt');return false;" class="button textual icon requireCanWrite requireCanAdd" title="Inserir acima"><span class="teamworkIcon">l</span></button>
+      <button onclick="$('#workSpace').trigger('addBelowCurrentTask.gantt');return false;" class="button textual icon requireCanWrite requireCanAdd" title="Insira abaixo"><span class="teamworkIcon">X</span></button>
       <span class="ganttButtonSeparator requireCanWrite requireCanInOutdent"></span>
-      <button onclick="$('#workSpace').trigger('outdentCurrentTask.gantt');return false;" class="button textual icon requireCanWrite requireCanInOutdent" title="un-indent task"><span class="teamworkIcon">.</span></button>
-      <button onclick="$('#workSpace').trigger('indentCurrentTask.gantt');return false;" class="button textual icon requireCanWrite requireCanInOutdent" title="indent task"><span class="teamworkIcon">:</span></button>
+      <button onclick="$('#workSpace').trigger('outdentCurrentTask.gantt');return false;" class="button textual icon requireCanWrite requireCanInOutdent" title="Recuar Tarefa para a esquerda"><span class="teamworkIcon">.</span></button>
+      <button onclick="$('#workSpace').trigger('indentCurrentTask.gantt');return false;" class="button textual icon requireCanWrite requireCanInOutdent" title="Recuar Tarefa para a direita"><span class="teamworkIcon">:</span></button>
       <span class="ganttButtonSeparator requireCanWrite requireCanMoveUpDown"></span>
-      <button onclick="$('#workSpace').trigger('moveUpCurrentTask.gantt');return false;" class="button textual icon requireCanWrite requireCanMoveUpDown" title="move up"><span class="teamworkIcon">k</span></button>
-      <button onclick="$('#workSpace').trigger('moveDownCurrentTask.gantt');return false;" class="button textual icon requireCanWrite requireCanMoveUpDown" title="move down"><span class="teamworkIcon">j</span></button>
+      <button onclick="$('#workSpace').trigger('moveUpCurrentTask.gantt');return false;" class="button textual icon requireCanWrite requireCanMoveUpDown" title="Mover para cima"><span class="teamworkIcon">k</span></button>
+      <button onclick="$('#workSpace').trigger('moveDownCurrentTask.gantt');return false;" class="button textual icon requireCanWrite requireCanMoveUpDown" title="Mover para baixo"><span class="teamworkIcon">j</span></button>
       <span class="ganttButtonSeparator requireCanWrite requireCanDelete"></span>
-      <button onclick="$('#workSpace').trigger('deleteFocused.gantt');return false;" class="button textual icon delete requireCanWrite" title="Elimina"><span class="teamworkIcon">&cent;</span></button>
+      <button onclick="$('#workSpace').trigger('deleteFocused.gantt');return false;" class="button textual icon delete requireCanWrite" title="Excluir"><span class="teamworkIcon">&cent;</span></button>
       <span class="ganttButtonSeparator"></span>
       <button onclick="$('#workSpace').trigger('expandAll.gantt');return false;" class="button textual icon " title="EXPAND_ALL"><span class="teamworkIcon">6</span></button>
       <button onclick="$('#workSpace').trigger('collapseAll.gantt'); return false;" class="button textual icon " title="COLLAPSE_ALL"><span class="teamworkIcon">5</span></button>
 
     <span class="ganttButtonSeparator"></span>
-      <button onclick="$('#workSpace').trigger('zoomMinus.gantt'); return false;" class="button textual icon " title="zoom out"><span class="teamworkIcon">)</span></button>
-      <button onclick="$('#workSpace').trigger('zoomPlus.gantt');return false;" class="button textual icon " title="zoom in"><span class="teamworkIcon">(</span></button>
+      <button onclick="$('#workSpace').trigger('zoomMinus.gantt'); return false;" class="button textual icon " title="Reduzir o zoom"><span class="teamworkIcon">)</span></button>
+      <button onclick="$('#workSpace').trigger('zoomPlus.gantt');return false;" class="button textual icon " title="Ampliar o Zoom"><span class="teamworkIcon">(</span></button>
     <span class="ganttButtonSeparator"></span>
-      <button onclick="$('#workSpace').trigger('print.gantt');return false;" class="button textual icon " title="Print"><span class="teamworkIcon">p</span></button>
+      <button onclick="$('#workSpace').trigger('print.gantt');return false;" class="button textual icon " title="Imprimir"><span class="teamworkIcon">p</span></button>
     <span class="ganttButtonSeparator"></span>
       <button onclick="ge.gantt.showCriticalPath=!ge.gantt.showCriticalPath; ge.redraw();return false;" class="button textual icon requireCanSeeCriticalPath" title="CRITICAL_PATH"><span class="teamworkIcon">&pound;</span></button>
     <span class="ganttButtonSeparator requireCanSeeCriticalPath"></span>
@@ -536,12 +646,12 @@ function showBaselineInfo (event,element){
       <button onclick="$('#workSpace').trigger('fullScreen.gantt');return false;" class="button textual icon" title="FULLSCREEN" id="fullscrbtn"><span class="teamworkIcon">@</span></button>
       <button onclick="ge.element.toggleClass('colorByStatus' );return false;" class="button textual icon"><span class="teamworkIcon">&sect;</span></button>
 
-    <button onclick="editResources();" class="button textual requireWrite" title="edit resources"><span class="teamworkIcon">M</span></button>
+    <button onclick="editResources();" class="button textual requireWrite" title="Editar recursos."><span class="teamworkIcon">M</span></button>
       &nbsp; &nbsp; &nbsp; &nbsp;
     </div>
 
     <div>
-      <button onclick="saveGanttOnServer();" class="button first big requireWrite" title="Save">Save</button>
+      <button onclick="saveGanttOnServer();" class="button first big requireWrite" title="Salvar">Salvar</button>
       <input type="file" name="load-file" id="load-file">
       <label for="load-file">Load</label>
       <button onclick='newProject();' class='button requireWrite newproject'><em>clear project</em></button>
@@ -549,31 +659,31 @@ function showBaselineInfo (event,element){
       <button class="button opt collab" title="Start with Twproject" onclick="collaborate($(this));" style="display:none;"><em>collaborate</em></button>
     </div>
   </div>
-  -->
-</div>
+ --></div>
 
-<div class="__template__" type="TASKSEDITHEAD"><!--
+<div class="__template__" type="TASKSEDITHEAD"><!-- 
   <table class="gdfTable" cellspacing="0" cellpadding="0">
     <thead>
     <tr style="height:40px">
       <th class="gdfColHeader" style="width:35px; border-right: none"></th>
       <th class="gdfColHeader" style="width:25px;"></th>
-      <th class="gdfColHeader gdfResizable" style="width:100px;">code/short name</th>
-      <th class="gdfColHeader gdfResizable" style="width:300px;">name</th>
-      <th class="gdfColHeader"  align="center" style="width:17px;" title="Start date is a milestone."><span class="teamworkIcon" style="font-size: 8px;">^</span></th>
-      <th class="gdfColHeader gdfResizable" style="width:80px;">start</th>
-      <th class="gdfColHeader"  align="center" style="width:17px;" title="End date is a milestone."><span class="teamworkIcon" style="font-size: 8px;">^</span></th>
-      <th class="gdfColHeader gdfResizable" style="width:80px;">End</th>
-      <th class="gdfColHeader gdfResizable" style="width:50px;">dur.</th>
+      <th class="gdfColHeader gdfResizable" style="width:100px;">ID</th>
+      <th class="gdfColHeader gdfResizable" style="width:300px;">Nome</th>
+      <th class="gdfColHeader"  align="center" style="width:17px;" title="A data de início é um marco."><span class="teamworkIcon" style="font-size: 8px;">^</span></th>
+      <th class="gdfColHeader gdfResizable" style="width:80px;">Início</th>
+      <th class="gdfColHeader"  align="center" style="width:17px;" title="Data de Término é um marco."><span class="teamworkIcon" style="font-size: 8px;">^</span></th>
+      <th class="gdfColHeader gdfResizable" style="width:80px;">Término</th>
+      <th class="gdfColHeader gdfResizable" style="width:50px;">Dur.</th>
       <th class="gdfColHeader gdfResizable" style="width:20px;">%</th>
-      <th class="gdfColHeader gdfResizable requireCanSeeDep" style="width:50px;">depe.</th>
-      <th class="gdfColHeader gdfResizable" style="width:1000px; text-align: left; padding-left: 10px;">assignees</th>
+      <th class="gdfColHeader gdfResizable requireCanSeeDep" style="width:50px;">Depe.</th>
+      <th class="gdfColHeader"  align="center" style="width:60px;" >Entrega</th>
+      <th class="gdfColHeader gdfResizable" style="width:1000px; text-align: left; padding-left: 10px;">Atribuições</th>
     </tr>
     </thead>
   </table>
-  --></div>
+ --></div>
 
-<div class="__template__" type="TASKROW"><!--
+ <div class="__template__" type="TASKROW"><!--
   <tr id="tid_(#=obj.id#)" taskId="(#=obj.id#)" class="taskEditRow (#=obj.isParent()?'isParent':''#) (#=obj.collapsed?'collapsed':''#)" level="(#=level#)">
     <th class="gdfCell edit" align="right" style="cursor:pointer;"><span class="taskRowIndex">(#=obj.getRow()+1#)</span> <span class="teamworkIcon" style="font-size:12px;" >e</span></th>
     <td class="gdfCell noClip" align="center"><div class="taskStatus cvcColorSquare" status="(#=obj.status#)"></div></td>
@@ -589,6 +699,7 @@ function showBaselineInfo (event,element){
     <td class="gdfCell"><input type="text" name="duration" autocomplete="off" value="(#=obj.duration#)"></td>
     <td class="gdfCell"><input type="text" name="progress" class="validated" entrytype="PERCENTILE" autocomplete="off" value="(#=obj.progress?obj.progress:''#)" (#=obj.progressByWorklog?"readOnly":""#)></td>
     <td class="gdfCell requireCanSeeDep"><input type="text" name="depends" autocomplete="off" value="(#=obj.depends#)" (#=obj.hasExternalDep?"readonly":""#)></td>
+    <td class="gdfCell" align="center" ><input type="checkbox" name="entrega" (#=obj.entrega?"checked":""#)></td>
     <td class="gdfCell taskAssigs">(#=obj.getAssigsString()#)</td>
   </tr>
   --></div>
@@ -606,6 +717,7 @@ function showBaselineInfo (event,element){
     <td class="gdfCell"></td>
     <td class="gdfCell"></td>
     <td class="gdfCell requireCanSeeDep"></td>
+    <td class="gdfCell"></td>
     <td class="gdfCell"></td>
   </tr>
   --></div>
@@ -638,35 +750,35 @@ function showBaselineInfo (event,element){
 
 
 
-<div class="__template__" type="TASK_EDITOR"><!--
+<div class="__template__" type="TASK_EDITOR"><!-- 
   <div class="ganttTaskEditor">
-    <h2 class="taskData">Task editor</h2>
+    <h2 class="taskData">Editor de Tarefas</h2>
     <table  cellspacing="1" cellpadding="5" width="100%" class="taskData table" border="0">
           <tr>
         <td width="200" style="height: 80px"  valign="top">
-          <label for="code">code/short name</label><br>
+          <label for="code">ID</label><br>
           <input type="text" name="code" id="code" value="" size=15 class="formElements" autocomplete='off' maxlength=255 style='width:100%' oldvalue="1">
         </td>
-        <td colspan="3" valign="top"><label for="name" class="required">name</label><br><input type="text" name="name" id="name"class="formElements" autocomplete='off' maxlength=255 style='width:100%' value="" required="true" oldvalue="1"></td>
+        <td colspan="3" valign="top"><label for="name" class="required">Nome da Tarefa</label><br><input type="text" name="name" id="name"class="formElements" autocomplete='off' maxlength=255 style='width:100%' value="" required="true" oldvalue="1"></td>
           </tr>
 
 
       <tr class="dateRow">
         <td nowrap="">
           <div style="position:relative">
-            <label for="start">start</label>&nbsp;&nbsp;&nbsp;&nbsp;
-            <input type="checkbox" id="startIsMilestone" name="startIsMilestone" value="yes"> &nbsp;<label for="startIsMilestone">is milestone</label>&nbsp;
+            <label for="start">Início</label>&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="checkbox" id="startIsMilestone" name="startIsMilestone" value="yes"> &nbsp;<label for="startIsMilestone">é marco</label>&nbsp;
             <br><input type="text" name="start" id="start" size="8" class="formElements dateField validated date" autocomplete="off" maxlength="255" value="" oldvalue="1" entrytype="DATE">
             <span title="calendar" id="starts_inputDate" class="teamworkIcon openCalendar" onclick="$(this).dateField({inputField:$(this).prevAll(':input:first'),isSearchField:false});">m</span>          </div>
         </td>
         <td nowrap="">
-          <label for="end">End</label>&nbsp;&nbsp;&nbsp;&nbsp;
-          <input type="checkbox" id="endIsMilestone" name="endIsMilestone" value="yes"> &nbsp;<label for="endIsMilestone">is milestone</label>&nbsp;
+          <label for="end">Término</label>&nbsp;&nbsp;&nbsp;&nbsp;
+          <input type="checkbox" id="endIsMilestone" name="endIsMilestone" value="yes"> &nbsp;<label for="endIsMilestone">é marco</label>&nbsp;
           <br><input type="text" name="end" id="end" size="8" class="formElements dateField validated date" autocomplete="off" maxlength="255" value="" oldvalue="1" entrytype="DATE">
           <span title="calendar" id="ends_inputDate" class="teamworkIcon openCalendar" onclick="$(this).dateField({inputField:$(this).prevAll(':input:first'),isSearchField:false});">m</span>
         </td>
         <td nowrap="" >
-          <label for="duration" class=" ">Days</label><br>
+          <label for="duration" class=" ">Dias</label><br>
           <input type="text" name="duration" id="duration" size="4" class="formElements validated durationdays" title="Duration is in working days." autocomplete="off" maxlength="255" value="" oldvalue="1" entrytype="DURATIONDAYS">&nbsp;
         </td>
       </tr>
@@ -675,17 +787,17 @@ function showBaselineInfo (event,element){
         <td  colspan="2">
           <label for="status" class=" ">status</label><br>
           <select id="status" name="status" class="taskStatus" status="(#=obj.status#)"  onchange="$(this).attr('STATUS',$(this).val());">
-            <option value="STATUS_ACTIVE" class="taskStatus" status="STATUS_ACTIVE" >active</option>
-            <option value="STATUS_WAITING" class="taskStatus" status="STATUS_WAITING" >suspended</option>
-            <option value="STATUS_SUSPENDED" class="taskStatus" status="STATUS_SUSPENDED" >suspended</option>
-            <option value="STATUS_DONE" class="taskStatus" status="STATUS_DONE" >completed</option>
-            <option value="STATUS_FAILED" class="taskStatus" status="STATUS_FAILED" >failed</option>
-            <option value="STATUS_UNDEFINED" class="taskStatus" status="STATUS_UNDEFINED" >undefined</option>
+            <option value="STATUS_ACTIVE" class="taskStatus" status="STATUS_ACTIVE" >ativa</option>
+            <option value="STATUS_WAITING" class="taskStatus" status="STATUS_WAITING" >suspensa</option>
+            <option value="STATUS_SUSPENDED" class="taskStatus" status="STATUS_SUSPENDED" >suspensa</option>
+            <option value="STATUS_DONE" class="taskStatus" status="STATUS_DONE" >concluída</option>
+            <option value="STATUS_FAILED" class="taskStatus" status="STATUS_FAILED" >fracassada</option>
+            <option value="STATUS_UNDEFINED" class="taskStatus" status="STATUS_UNDEFINED" >indefinida</option>
           </select>
         </td>
 
         <td valign="top" nowrap>
-          <label>progress</label><br>
+          <label>% Concluído</label><br>
           <input type="text" name="progress" id="progress" size="7" class="formElements validated percentile" autocomplete="off" maxlength="255" value="" oldvalue="1" entrytype="PERCENTILE">
         </td>
       </tr>
@@ -693,28 +805,28 @@ function showBaselineInfo (event,element){
           </tr>
           <tr>
             <td colspan="4">
-              <label for="description">Description</label><br>
+              <label for="description">Descrição</label><br>
               <textarea rows="3" cols="30" id="description" name="description" class="formElements" style="width:100%"></textarea>
             </td>
           </tr>
         </table>
 
-    <h2>Assignments</h2>
+    <h2>Atribuições</h2>
   <table  cellspacing="1" cellpadding="0" width="100%" id="assigsTable">
     <tr>
-      <th style="width:100px;">name</th>
-      <th style="width:70px;">Role</th>
+      <th style="width:100px;">nome</th>
+      <th style="width:70px;">Função</th>
       <th style="width:30px;">est.wklg.</th>
       <th style="width:30px;" id="addAssig"><span class="teamworkIcon" style="cursor: pointer">+</span></th>
     </tr>
   </table>
 
   <div style="text-align: right; padding-top: 20px">
-    <span id="saveButton" class="button first" onClick="$(this).trigger('saveFullEditor.gantt');">Save</span>
+    <span id="saveButton" class="button first" onClick="$(this).trigger('saveFullEditor.gantt');">Salvar</span>
   </div>
 
-  </div>
-  --></div>
+  </div> 
+--></div>
 
 
 
@@ -740,7 +852,7 @@ function showBaselineInfo (event,element){
       </tr>
     </table>
 
-    <div style="text-align: right; padding-top: 20px"><button id="resSaveButton" class="button big">Save</button></div>
+    <div style="text-align: right; padding-top: 20px"><button id="resSaveButton" class="button big">Salvar</button></div>
   </div>
   --></div>
 
@@ -793,29 +905,29 @@ function showBaselineInfo (event,element){
 
   function loadI18n(){
     GanttMaster.messages = {
-      "CANNOT_WRITE":"No permission to change the following task:",
-      "CHANGE_OUT_OF_SCOPE":"Project update not possible as you lack rights for updating a parent project.",
-      "START_IS_MILESTONE":"Start date is a milestone.",
-      "END_IS_MILESTONE":"End date is a milestone.",
-      "TASK_HAS_CONSTRAINTS":"Task has constraints.",
-      "GANTT_ERROR_DEPENDS_ON_OPEN_TASK":"Error: there is a dependency on an open task.",
-      "GANTT_ERROR_DESCENDANT_OF_CLOSED_TASK":"Error: due to a descendant of a closed task.",
-      "TASK_HAS_EXTERNAL_DEPS":"This task has external dependencies.",
+      "CANNOT_WRITE":"Nenhuma permissão para alterar a seguinte tarefa:",
+      "CHANGE_OUT_OF_SCOPE":"Atualização do projeto não é possível, pois você não tem direitos para atualizar um projeto pai.",
+      "START_IS_MILESTONE":"A data de início é um marco.",
+      "END_IS_MILESTONE":"Data final é um marco.",
+      "TASK_HAS_CONSTRAINTS":"Tarefa tem restrições.",
+      "GANTT_ERROR_DEPENDS_ON_OPEN_TASK":"Erro: Existe uma dependência de uma tarefa aberta.",
+      "GANTT_ERROR_DESCENDANT_OF_CLOSED_TASK":"Erro: devido a um descendente de uma tarefa fechada.",
+      "TASK_HAS_EXTERNAL_DEPS":"Esta tarefa tem dependências externas.",
       "GANNT_ERROR_LOADING_DATA_TASK_REMOVED":"GANNT_ERROR_LOADING_DATA_TASK_REMOVED",
-      "CIRCULAR_REFERENCE":"Circular reference.",
-      "CANNOT_DEPENDS_ON_ANCESTORS":"Cannot depend on ancestors.",
-      "INVALID_DATE_FORMAT":"The data inserted are invalid for the field format.",
-      "GANTT_ERROR_LOADING_DATA_TASK_REMOVED":"An error has occurred while loading the data. A task has been trashed.",
-      "CANNOT_CLOSE_TASK_IF_OPEN_ISSUE":"Cannot close a task with open issues",
-      "TASK_MOVE_INCONSISTENT_LEVEL":"You cannot exchange tasks of different depth.",
+      "CIRCULAR_REFERENCE":"Referencia circular.",
+      "CANNOT_DEPENDS_ON_ANCESTORS":"Não pode depender de ancestrais.",
+      "INVALID_DATE_FORMAT":"Os dados inseridos são inválidos para o formato de campo.",
+      "GANTT_ERROR_LOADING_DATA_TASK_REMOVED":"Ocorreu um erro ao carregar os dados.Uma tarefa foi destruída.",
+      "CANNOT_CLOSE_TASK_IF_OPEN_ISSUE":"Não é possível fechar uma tarefa com problemas abertos",
+      "TASK_MOVE_INCONSISTENT_LEVEL":"Você não pode trocar tarefas de profundidade diferente.",
       "CANNOT_MOVE_TASK":"CANNOT_MOVE_TASK",
       "PLEASE_SAVE_PROJECT":"PLEASE_SAVE_PROJECT",
-      "GANTT_SEMESTER":"Semester",
+      "GANTT_SEMESTER":"Semestre",
       "GANTT_SEMESTER_SHORT":"s.",
-      "GANTT_QUARTER":"Quarter",
-      "GANTT_QUARTER_SHORT":"q.",
-      "GANTT_WEEK":"Week",
-      "GANTT_WEEK_SHORT":"w."
+      "GANTT_QUARTER":"Trimestre",
+      "GANTT_QUARTER_SHORT":"t.",
+      "GANTT_WEEK":"Semana",
+      "GANTT_WEEK_SHORT":"S."
     };
   }
 

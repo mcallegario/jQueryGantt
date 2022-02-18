@@ -501,7 +501,7 @@ function resynchDates(leavingField, startField, startMilesField, durationField, 
       date.setHours(0, 0, 0, 0); //this is necessary because decreasing end we are at 23:50
       start = computeStart(date.getTime()); //not strictly necessary
     } else if ("CHANGE_DURATION" == command) {
-      duration = getDurationInUnits(new Date(start),new Date(end)) + 1; 
+      duration = getDurationInUnits(new Date(start),new Date(end)); 
     }
 
     startField.val(new Date(start).format());

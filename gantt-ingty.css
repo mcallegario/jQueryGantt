@@ -1,0 +1,13 @@
+@import url('gantt.css');
+
+.ganttButtonBar button  {
+    min-width: 0px;
+}
+
+td.gdfCell input{
+    color: #333;
+}
+
+.ganttSVGBox svg:not(:root) {
+    overflow: initial; 
+}
