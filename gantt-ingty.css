@@ -11,3 +11,7 @@ td.gdfCell input{
 .ganttSVGBox svg:not(:root) {
     overflow: initial; 
 }
+
+.taskLinkPathSVG:hover {
+    stroke: rgb(0 70 198);
+}

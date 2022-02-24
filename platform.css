@@ -581,12 +581,12 @@ span.separator {
   color: #009E94;
 }
 
-form {
+.TWGanttWorkSpace form {
   margin: 0;
   padding: 0;
 }
 
-select {
+.TWGanttWorkSpace select {
   border: 1px solid #91B4B7;
   padding: 4px;
   font-size: 16px;
@@ -622,7 +622,7 @@ span#FLD_LOGIN_NAMEerror, span#FLD_PWDerror {
   margin-top: 2px;
 }
 
-input {
+.TWGanttWorkSpace input {
   background-color: white;
   padding: 4px;
   font-size: 16px;

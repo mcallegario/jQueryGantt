@@ -325,12 +325,15 @@ GridEditor.prototype.bindRowInputEvents = function (task, taskRow) {
 
     //update task from editor
     var field = el.prop("name");
+    if (el.isValueChanged()) {
 
-    if (field == "startIsMilestone" || field == "endIsMilestone") {
       self.master.beginTransaction();
-      //milestones
       task[field] = el.prop("checked");
-      resynchDates(el, row.find("[name=start]"), row.find("[name=startIsMilestone]"), row.find("[name=duration]"), row.find("[name=end]"), row.find("[name=endIsMilestone]"));
+
+      if (field == "startIsMilestone" || field == "endIsMilestone") {
+        //milestones
+        resynchDates(el, row.find("[name=start]"), row.find("[name=startIsMilestone]"), row.find("[name=duration]"), row.find("[name=end]"), row.find("[name=endIsMilestone]"));
+      }
       self.master.endTransaction();
     }
 
@@ -635,7 +638,7 @@ GridEditor.prototype.openFullEditor = function (task, editOnlyAssig) {
       task.description = taskEditor.find("#description").val();
       task.code = taskEditor.find("#code").val();
       task.progress = parseFloat(taskEditor.find("#progress").val());
-      //task.duration = parseInt(taskEditor.find("#duration").val()); //bicch rimosso perchè devono essere ricalcolata dalla start end, altrimenti sbaglia
+      //task.duration = parseInt(taskEditor.find("#duration").val()); //Bicch removido porque eles devem ser recalculados pelo início do início, caso contrário, é errado
       task.startIsMilestone = taskEditor.find("#startIsMilestone").is(":checked");
       task.endIsMilestone = taskEditor.find("#endIsMilestone").is(":checked");
 
@@ -643,6 +646,11 @@ GridEditor.prototype.openFullEditor = function (task, editOnlyAssig) {
       task.typeId = taskEditor.find("#type").val();
       task.relevance = taskEditor.find("#relevance").val();
       task.progressByWorklog= taskEditor.find("#progressByWorklog").is(":checked");
+
+      //if (typeof(onTaskChanged)=="function") onTaskChanged(task,taskEditor);
+      task.entrega = taskEditor.find("#entrega").is(":checked");
+      task.inspecao = taskEditor.find("#inspecao").is(":checked");
+      task.aquisicao = taskEditor.find("#aquisicao").is(":checked");
 
       //set assignments
       var cnt=0;
