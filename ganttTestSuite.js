@@ -46,6 +46,7 @@ function enqueueNewTest() {
       canSeePopEdit:              true,
       canSeeFullEdit:             true,
       canSeeDep:                  true,
+      canSeeStatus:               true,
       canSeeCriticalPath:         true,
       canAddIssue:                false,
       cannotCloseTaskIfIssueOpen: false
@@ -326,7 +327,7 @@ ganttTestUnits.push({name: "Cambio le dipendenze di C mettendo lag -> A e B devo
 // 15 ------------------------------------------------------------------------------------
 ganttTestUnits.push({name: "Pan/Move nel caso di un figlio F con dipendenze ad uno 'zio' Z. Sposto avanti R -> P mantiene la durata",
   tasks:                   [
-    {"id": "1134", "name": "Root", "progress": 0, "progressByWorklog": false, "relevance": 0, "type": "", "typeId": "", "description": "", "code": "T1134", "level": 0, "status": "STATUS_ACTIVE", "depends": "", "canWrite": true, "start": 1480374000000, "duration": 2, "end": 1480546799999, "startIsMilestone": false, "endIsMilestone": false, "collapsed": false, "assigs": [], "loadComplete": false, "statusColor": "#3BBF67", "tags": "", "startDate": "01/12/2016", "endDate": "01/12/2016", "lastModified": 1480593817093, "lastModifier": "System Manager", "totalIssues": 0, "openIssues": 0, "budget": 0, "totalCosts": 0, "totalWorklog": 0, "totalEstimated": 0, "canAddIssue": true, "hasChild": true, "unchanged": false},
+    {"id": "1134", "name": "Root", "progress": 0, "progressByWorklog": false, "relevance": 0, "type": "", "typeId": "", "description": "", "code": "T1134", "level": 0, "status": "STATUS_ACTIVE", "depends": "", "canWrite": true, "start": 1480374000000, "duration": 2, "end": 1480546799999, "startIsMilestone": false, "endIsMilestone": false, "collapsed": false, "assigs": [], "loadComplete": false, "statusColor": "#3BBF67", "tags": "", "startDate": "01/12/2016", "endDate": "01/12/2016", "lastModified": 1480593817093, "lastModifier": "System Manager", "totalIssues": 0, "openIssues": 0, "budget": 0, "totalCosts": 0, "totalWorklog": 0, "totalEstimated": 0, "canAddIssue": true, "hasChild": true, "changed": true},
     {"id": "tmp1", "name": "Z", "progress": 0, "progressByWorklog": false, "relevance": 0, "type": "", "typeId": "", "description": "", "code": "", "level": 1, "status": "STATUS_ACTIVE", "depends": "", "canWrite": true, "start": 1480374000000, "duration": 1, "end": 1480460399999, "startIsMilestone": false, "endIsMilestone": false, "assigs": [], "hasChild": false},
     {"id": "tmp2", "name": "P", "progress": 0, "progressByWorklog": false, "relevance": 0, "type": "", "typeId": "", "description": "", "code": "", "level": 1, "status": "STATUS_ACTIVE", "depends": "", "canWrite": true, "start": 1480374000000, "duration": 2, "end": 1480546799999, "startIsMilestone": false, "endIsMilestone": false, "assigs": [], "hasChild": true},
     {"id": "tmp3", "name": "F", "progress": 0, "progressByWorklog": false, "relevance": 0, "type": "", "typeId": "", "description": "", "code": "", "level": 2, "status": "STATUS_WAITING", "depends": "2", "canWrite": true, "start": 1480460400000, "duration": 1, "end": 1480546799999, "startIsMilestone": false, "endIsMilestone": false, "assigs": [], "hasChild": false}

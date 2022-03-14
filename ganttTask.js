@@ -79,12 +79,14 @@ function Task(id, name, code, level, start, end, duration, collapsed) {
 
 Task.prototype.clone = function () {
   var ret = {};
+  let ignoreKey = ["ganttElement","master","rowElement"]
   for (var key in this) {
     if (typeof(this[key]) != "function")
-      if (typeof(this[key]) != "object" || Array.isArray(this[key]))
-      ret[key] = this[key];
+      //if (typeof(this[key]) != "object" || Array.isArray(this[key]))
+      if (ignoreKey.indexOf(key)==-1) ret[key] = this[key];
+      //ret[key] = JSON.parse(JSON.stringify(this[key]));
     }
-  return ret;
+  return ret; 
 };
 
 Task.prototype.getAssigsString = function () {
@@ -457,17 +459,41 @@ function updateTree(task) {
   return true;
 }
 
+Task.prototype.calculateProgress = function () {
+  var task = this;
+
+  while (task) {
+    //try to enlarge parent
+    task = task.getParent();
+
+    //no parent:exit
+    if (!task) return true;
+
+    task.getChildrenBoudaries();
+    
+  }
+
+}
 
 Task.prototype.getChildrenBoudaries = function () {
   var newStart = Infinity;
   var newEnd = -Infinity;
   var children = this.getChildren();
+  var ponderacaoProgress = [];
+  var totalDuration = 0;
+  var newProgress = 0;
   for (var i = 0; i < children.length; i++) {
     var ch = children[i];
     newStart = Math.min(newStart, ch.start);
     newEnd = Math.max(newEnd, ch.end);
+    ponderacaoProgress.push(ch.progress * ch.duration);
+    totalDuration += ch.duration;
   }
-  return({start:newStart,end:newEnd})
+  ponderacaoProgress.forEach(value => {
+    newProgress += value/totalDuration;
+  });
+  this.progress = Math.round(newProgress);
+  return({start:newStart,end:newEnd,progress:newProgress})
 }
 
 //<%---------- CHANGE STATUS ---------------------- --%>

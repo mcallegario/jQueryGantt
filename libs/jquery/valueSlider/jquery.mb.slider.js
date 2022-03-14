@@ -1,24 +1,25 @@
-/*******************************************************************************
- * jquery.mb.components
- * file: jquery.mb.slider.js
- * last modified: 18/11/17 18.21
- * Version:  {{ version }}
- * Build:  {{ buildnum }}
- *
- * Open Lab s.r.l., Florence - Italy
- * email: matteo@open-lab.com
- * site:  http://pupunzi.com
- *  http://open-lab.com
- * blog:  http://pupunzi.open-lab.com
- *
- * Licences: MIT, GPL
- * http://www.opensource.org/licenses/mit-license.php
- * http://www.gnu.org/licenses/gpl.html
- *
- * Copyright (c) 2001-2017. Matteo Bicocchi (Pupunzi)
- ******************************************************************************/
+/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+ jquery.mb.components
+ 
+ file: jquery.mb.slider.js
+ last modified: 10/31/18 7:15 PM
+ Version:  {{ version }}
+ Build:  {{ buildnum }}
+ 
+ Open Lab s.r.l., Florence - Italy
+ email:  matteo@open-lab.com
+ blog: 	http://pupunzi.open-lab.com
+ site: 	http://pupunzi.com
+ 	http://open-lab.com
+ 
+ Licences: MIT, GPL
+ http://www.opensource.org/licenses/mit-license.php
+ http://www.gnu.org/licenses/gpl.html
+ 
+ Copyright (c) 2001-2018. Matteo Bicocchi (Pupunzi)
+ :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 
-(function ($) {
+ (function ($) {
 
 	$.mbSlider = {
 		name   : "mb.slider",
@@ -51,7 +52,7 @@
 				$.extend(slider.options, $.mbSlider.defaults, options, this.metadata);
 				slider.options.element = slider;
 
-				if (slider.options.grid == 0)
+				if (slider.options.grid === 0)
 					slider.options.grid = 1;
 
 				if (this.options.startAt < 0 && this.options.startAt < slider.options.minVal)
@@ -65,7 +66,7 @@
 				slider.sliderStart = $("<div class='mb_sliderStart'/>");
 				slider.sliderEnd = $("<div class='mb_sliderEnd'/>");
 				slider.sliderValue = $("<div class='mb_sliderValue'/>").css({color: this.options.rangeColor});
-				slider.sliderZeroLabel = $("<div class='mb_sliderZeroLabel'>0</div>").css({position: "absolute", top: (slider.options.labelPos == "top" ? -18 : 29)});
+				slider.sliderZeroLabel = $("<div class='mb_sliderZeroLabel'>0</div>").css({position: "absolute", top: (slider.options.labelPos === "top" ? -18 : 29)});
 				slider.sliderValueLabel = $("<div class='mb_sliderValueLabel'/>").css({position: "absolute", borderTop: "2px solid " + slider.options.rangeColor});
 
 				slider.sliderBar = $("<div class='mb_sliderBar'/>").css({position: "relative", display: "block"});
@@ -78,7 +79,6 @@
 
 				if (slider.options.showVal) $(slider).append(slider.sliderEnd);
 				if (slider.options.showVal) $(slider).prepend(slider.sliderStart);
-				slider.sliderBar.append(slider.sliderRange);
 				slider.sliderBar.append(slider.sliderRange);
 
 				if (slider.options.minVal < 0) {
@@ -115,14 +115,15 @@
 					e.preventDefault();
 					e.stopPropagation();
 
-					var mousePos = e.clientX - slider.sliderBar.offset().left;
+          var clientX = e.clientX || e.touches[0].clientX;
+          var mousePos = window.scrollX + clientX - slider.sliderBar.offset().left;
 					var grid = (slider.options.grid * slider.sliderBar.outerWidth()) / slider.rangeVal;
 					var posInGrid = grid * Math.round(mousePos / grid);
 					var evalPos = ((slider.options.maxVal - slider.options.minVal) * posInGrid) / (slider.sliderBar.outerWidth() - (slider.sliderHandler.outerWidth() / 2)) + parseFloat(slider.options.minVal);
 
 					slider.evalPosGrid = Math.max(slider.options.minVal, Math.min(slider.options.maxVal, slider.options.grid * Math.round(evalPos / slider.options.grid)));
 
-					if (typeof slider.options.onSlide == "function" && slider.gridStep != posInGrid) {
+					if (typeof slider.options.onSlide == "function" && slider.gridStep !== posInGrid) {
 						slider.gridStep = posInGrid;
 						slider.options.onSlide(slider);
 					}
@@ -138,29 +139,31 @@
 				 */
 				var sliderElements = slider.sliderBar.add(slider.sliderHandler);
 
-				sliderElements.on("mousedown.mb_slider", function (e) {
+				sliderElements.on("mousedown.mb_slider, touchstart.mb_slider", function (e) {
+
+					e = e.originalEvent;
 
 					if (!$(e.target).is(slider.sliderHandler))
 						setNewPosition(e);
 
-					if (typeof slider.options.onStart == "function")
+          e.preventDefault();
+          e.stopPropagation();
+
+          if (typeof slider.options.onStart == "function")
 						slider.options.onStart(slider);
 
-					$(document).on("mousemove.mb_slider", function (e) {
-						setNewPosition(e);
+					$(document).on("mousemove.mb_slider, touchmove.mb_slider", function (e) {
+            e = e.originalEvent;
+            setNewPosition(e);
 					});
 
-					$(document).on("mouseup.mb_slider", function () {
-						$(document).off("mousemove.mb_slider").off("mouseup.mb_slider");
+					$(document).on("mouseup.mb_slider, touchend.mb_slider", function () {
+						$(document).off("mousemove.mb_slider, touchmove.mb_slider").off("mouseup.mb_slider, touchend.mb_slider");
 						if (typeof slider.options.onStop == "function")
 							slider.options.onStop(slider);
 					});
 
 				});
-
-				$(window).on("resize", function() {
-          $(slider).mbsetVal(slider.evalPosGrid);
-        })
 
 				if (typeof slider.options.onSlideLoad == "function")
 					slider.options.onSlideLoad(slider);
@@ -171,7 +174,7 @@
 			var slider = $(this).get(0);
 			if (val > slider.options.maxVal) val = slider.options.maxVal;
 			if (val < slider.options.minVal) val = slider.options.minVal;
-			var startPos = val == slider.options.minVal ? 0 : Math.round(((val - slider.options.minVal) * slider.sliderBar.outerWidth()) / slider.rangeVal);
+			var startPos = val === slider.options.minVal ? 0 : Math.round(((val - slider.options.minVal) * slider.sliderBar.outerWidth()) / slider.rangeVal);
 			startPos = startPos >= 0 ? startPos : slider.zero + val;
 			var grid = (slider.options.grid * slider.sliderBar.outerWidth()) / slider.rangeVal;
 			var posInGrid = grid * Math.round(startPos / grid);
@@ -215,4 +218,3 @@
 	$.fn.mbgetVal = $.mbSlider.getVal;
 
 })(jQuery);
-

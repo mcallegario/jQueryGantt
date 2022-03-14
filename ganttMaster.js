@@ -57,6 +57,11 @@ function GanttMaster() {
   this.showBaselines=false; //allows to draw baselines
   this.baselineMillis; //millis of the current baseline loaded
 
+  this.onBeforeOpenFullEditor=null;
+  this.onAfterTaskChange=null;
+  this.onAfterFieldBlur=null;
+  this.onAfterRowChange=null;
+
 
   this.permissions = {
     canWriteOnParent: true,
@@ -68,6 +73,7 @@ function GanttMaster() {
     canSeePopEdit: true,
     canSeeFullEdit: true,
     canSeeDep: true,
+    canSeeStatus: true,
     canSeeCriticalPath: true,
     canAddIssue: false,
     cannotCloseTaskIfIssueOpen: false
@@ -334,7 +340,7 @@ GanttMaster.prototype.removeLink = function (fromTask, toTask) {
   if (!this.permissions.canWrite || (!fromTask.canWrite && !toTask.canWrite))
     return;
 
-  this.beginTransaction();
+  this.beginTransaction(toTask);
   var found = false;
   for (var i = 0; i < this.links.length; i++) {
     if (this.links[i].from == fromTask && this.links[i].to == toTask) {
@@ -349,13 +355,13 @@ GanttMaster.prototype.removeLink = function (fromTask, toTask) {
     if (this.updateLinks(toTask))
       this.changeTaskDates(toTask, toTask.start, toTask.end); // fake change to force date recomputation from dependencies
   }
-  this.endTransaction();
+  this.endTransaction(toTask);
 };
 
 GanttMaster.prototype.__removeAllLinks = function (task, openTrans) {
 
   if (openTrans)
-    this.beginTransaction();
+    this.beginTransaction(task);
   var found = false;
   for (var i = 0; i < this.links.length; i++) {
     if (this.links[i].from == task || this.links[i].to == task) {
@@ -368,7 +374,7 @@ GanttMaster.prototype.__removeAllLinks = function (task, openTrans) {
     this.updateDependsStrings();
   }
   if (openTrans)
-    this.endTransaction();
+    this.endTransaction(task);
 };
 
 //------------------------------------  ADD TASK --------------------------------------------
@@ -571,6 +577,24 @@ GanttMaster.prototype.getTask = function (taskId) {
 };
 
 
+GanttMaster.prototype.getTaskParent = function (taskId) {
+  var ret;
+  var level = -1;
+  for (var i = this.tasks.length-1; i >=0 ; i--) {
+    var tsk = this.tasks[i];
+    if (level==tsk.level) {
+      ret = tsk;
+      break;
+    }
+    if (tsk.id == taskId) {
+      level = tsk.level-1;
+      if (level==-1) break;
+    }
+  }
+  return ret;
+};
+
+
 GanttMaster.prototype.getResource = function (resId) {
   var ret;
   for (var i = 0; i < this.resources.length; i++) {
@@ -599,7 +623,7 @@ GanttMaster.prototype.moveTask = function (task, newStart) {
 };
 
 
-GanttMaster.prototype.taskIsChanged = function () {
+GanttMaster.prototype.taskIsChanged = function (task) {
   //console.debug("taskIsChanged");
   var master = this;
 
@@ -614,6 +638,7 @@ GanttMaster.prototype.taskIsChanged = function () {
     //profiler.stop();
   });
   //profilerext.stop();
+  if (typeof master.onAfterTaskChange=="function") master.onAfterTaskChange(task,master);
 };
 
 
@@ -761,7 +786,7 @@ GanttMaster.prototype.markUnChangedTasksAndAssignments=function(newProject){
           oldTask.level != newTask.level||
           oldTask.depends != newTask.depends;
 
-        newTask.unchanged=!taskChanged;
+        newTask.changed=taskChanged;
 
 
         //se ci sono assegnazioni
@@ -783,10 +808,10 @@ GanttMaster.prototype.markUnChangedTasksAndAssignments=function(newProject){
               //se c'è una nuova assig corrispondente
               if(newAssig){
                 //si confrontano i valori per vedere se è cambiata
-                newAssig.unchanged=
-                  newAssig.resourceId==oldAssig.resourceId &&
-                  newAssig.roleId==oldAssig.roleId &&
-                  newAssig.effort==oldAssig.effort;
+                newAssig.changed=
+                  newAssig.resourceId!=oldAssig.resourceId ||
+                  newAssig.roleId!=oldAssig.roleId ||
+                  newAssig.effort!=oldAssig.effort;
               }
             }
           }
@@ -799,8 +824,9 @@ GanttMaster.prototype.markUnChangedTasksAndAssignments=function(newProject){
 GanttMaster.prototype.loadCollapsedTasks = function () {
   var collTasks=[];
   if (localStorage ) {
-    if (localStorage.getObject("TWPGanttCollTasks"))
-      collTasks = localStorage.getObject("TWPGanttCollTasks");
+    const key = "TWPGanttCollTasks_"+this.workSpace.attr('id');
+    if (localStorage.getObject(key))
+      collTasks = localStorage.getObject(key);
     return collTasks;
   }
 };
@@ -809,10 +835,11 @@ GanttMaster.prototype.storeCollapsedTasks = function () {
   //console.debug("storeCollapsedTasks");
   if (localStorage) {
     var collTasks;
-    if (!localStorage.getObject("TWPGanttCollTasks"))
+    const key = "TWPGanttCollTasks_"+this.workSpace.attr('id');
+    if (!localStorage.getObject(key))
       collTasks = [];
     else
-      collTasks = localStorage.getObject("TWPGanttCollTasks");
+      collTasks = localStorage.getObject(key);
 
 
     for (var i = 0; i < this.tasks.length; i++) {
@@ -827,7 +854,7 @@ GanttMaster.prototype.storeCollapsedTasks = function () {
           collTasks.splice(pos,1);
       }
     }
-    localStorage.setObject("TWPGanttCollTasks", collTasks);
+    localStorage.setObject(key, collTasks);
   }
 };
 
@@ -965,9 +992,9 @@ GanttMaster.prototype.moveUpCurrentTask = function () {
     if (!(self.permissions.canWrite  || self.currentTask.canWrite) || !self.permissions.canMoveUpDown )
     return;
 
-    self.beginTransaction();
+    self.beginTransaction(self.currentTask);
     self.currentTask.moveUp();
-    self.endTransaction();
+    self.endTransaction(self.currentTask);
   }
 };
 
@@ -978,9 +1005,9 @@ GanttMaster.prototype.moveDownCurrentTask = function () {
     if (!(self.permissions.canWrite  || self.currentTask.canWrite) || !self.permissions.canMoveUpDown )
     return;
 
-    self.beginTransaction();
+    self.beginTransaction(self.currentTask);
     self.currentTask.moveDown();
-    self.endTransaction();
+    self.endTransaction(self.currentTask);
   }
 };
 
@@ -992,9 +1019,9 @@ GanttMaster.prototype.outdentCurrentTask = function () {
     if (!self.currentTask.canWrite || !par.canWrite || !par.getParent() || !par.getParent().canAdd)
     return;
 
-    self.beginTransaction();
+    self.beginTransaction(self.currentTask);
     self.currentTask.outdent();
-    self.endTransaction();
+    self.endTransaction(self.currentTask);
 
     //[expand]
     if (par) self.editor.refreshExpandStatus(par);
@@ -1010,9 +1037,9 @@ GanttMaster.prototype.indentCurrentTask = function () {
     if (!self.currentTask.canWrite || row <= 0 || !self.tasks[row - 1].canAdd)
     return;
 
-    self.beginTransaction();
+    self.beginTransaction(self.currentTask);
     self.currentTask.indent();
-    self.endTransaction();
+    self.endTransaction(self.currentTask);
   }
 };
 
@@ -1046,7 +1073,7 @@ GanttMaster.prototype.addBelowCurrentTask = function () {
         task.rowElement.click();
         task.rowElement.find("[name=name]").focus();
       }
-      self.endTransaction();
+      self.endTransaction(task);
     }
   }
 };
@@ -1078,7 +1105,7 @@ GanttMaster.prototype.addAboveCurrentTask = function () {
         task.rowElement.click();
         task.rowElement.find("[name=name]").focus();
       }
-      self.endTransaction();
+      self.endTransaction(task);
     }
   }
 };
@@ -1101,16 +1128,16 @@ GanttMaster.prototype.deleteCurrentTask = function (taskId) {
   var row = task.getRow();
   if (task && (row > 0 || self.isMultiRoot || task.isNew()) ) {
     var par = task.getParent();
-    self.beginTransaction();
+    self.beginTransaction(task);
     task.deleteTask();
-    task = undefined;
 
     //recompute depends string
     self.updateDependsStrings();
 
     //redraw
-    self.taskIsChanged();
+    self.taskIsChanged(task);
 
+    task = undefined;
     //[expand]
     if (par)
       self.editor.refreshExpandStatus(par);
@@ -1286,7 +1313,7 @@ GanttMaster.prototype.isTransactionInError = function () {
 
 };
 
-GanttMaster.prototype.endTransaction = function () {
+GanttMaster.prototype.endTransaction = function (task) {
   if (!this.__currentTransaction) {
     console.error("Transaction never started.");
     return true;
@@ -1305,7 +1332,7 @@ GanttMaster.prototype.endTransaction = function () {
 
     //shrink gantt bundaries
     this.gantt.shrinkBoundaries();
-    this.taskIsChanged(); //enqueue for gantt refresh
+    this.taskIsChanged(task); //enqueue for gantt refresh
 
 
     //error -> rollback

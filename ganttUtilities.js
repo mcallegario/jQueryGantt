@@ -150,9 +150,11 @@ $.gridify = function (table, opt) {
   }).addClass("gdfied unselectable").attr("unselectable", "true");
 
 
+
   function storeGridState() {
     //console.debug("storeGridState");
     if (localStorage) {
+      const keyLocalStorage = "TWPGanttGridState_"+box.parents('#TWGanttArea').parent().attr('id');
       var gridState = {};
 
       var colSizes = [];
@@ -162,15 +164,16 @@ $.gridify = function (table, opt) {
 
       gridState.colSizes = colSizes;
 
-      localStorage.setObject("TWPGanttGridState", gridState);
+      localStorage.setObject(keyLocalStorage, gridState);
     }
   }
 
   function loadGridState() {
     //console.debug("loadGridState")
     if (localStorage) {
-      if (localStorage.getObject("TWPGanttGridState")) {
-        var gridState = localStorage.getObject("TWPGanttGridState");
+      const keyLocalStorage = "TWPGanttGridState_"+box.parents('#TWGanttArea').parent().attr('id');
+      if (localStorage.getObject(keyLocalStorage)) {
+        var gridState = localStorage.getObject(keyLocalStorage);
         if (gridState.colSizes) {
           box.find(".gdfTable .gdfColHeader").each(function (i) {
             $(this).width(gridState.colSizes[i]);
@@ -179,7 +182,7 @@ $.gridify = function (table, opt) {
       }
     }
   }
-
+  window.testeBox = box;
   loadGridState();
   return box;
 };
@@ -220,6 +223,9 @@ $.splittify = {
     element.append(firstBox).append(secondBox).append(splitterBar);
 
     where.append(element);
+
+    //horizontalScrollingOnMouse(".splitBox1");
+    horizontalScrollingOnMouse(".splitBox2");
 
     var totalW = where.innerWidth();
     var splW = splitterBar.width();
@@ -369,15 +375,17 @@ $.splittify = {
     function storePosition () {
       //console.debug("storePosition",splitter.perc);
       if (localStorage) {
-        localStorage.setItem("TWPGanttSplitPos",splitter.perc);
+        const key = "TWPGanttSplitPos_"+splitter.element.parents('#TWGanttArea').parent().attr('id');
+        localStorage.setItem(key,splitter.perc);
       }
     }
 
     function loadPosition () {
       //console.debug("loadPosition");
       if (localStorage) {
-        if (localStorage.getItem("TWPGanttSplitPos")) {
-          splitter.perc=parseFloat(localStorage.getItem("TWPGanttSplitPos"));
+        const key = "TWPGanttSplitPos_"+splitter.element.parents('#TWGanttArea').parent().attr('id');
+        if (localStorage.getItem(key)) {
+          splitter.perc=parseFloat(localStorage.getItem(key));
         }
       }
     }
@@ -594,4 +602,32 @@ function stringToDuration(durStr) {
 function goToPage(url) {
   if (!canILeave()) return;
   window.location.href = url;
+}
+
+function horizontalScrollingOnMouse(selector){
+  const slider = document.querySelector(selector);
+  let isDown = false;
+  let start={};
+  let scroll={};
+
+  slider.addEventListener("mousedown", e => {
+    isDown = true;
+    //slider.classList.add("activeScrollingMouse");
+    start = {X:e.pageX - slider.offsetLeft,Y:e.pageY - slider.offsetTop}; 
+    scroll = {left:slider.scrollLeft,top:slider.scrollTop};
+  });
+  slider.addEventListener("mouseleave", () => {
+    isDown = false;
+    //slider.classList.remove("activeScrollingMouse");
+  });
+  slider.addEventListener("mouseup", () => {
+    isDown = false;
+    //slider.classList.remove("activeScrollingMouse");
+  });
+  slider.addEventListener("mousemove", e => {
+    if (!isDown) return;
+    e.preventDefault();
+    slider.scrollLeft = scroll.left - (e.pageX - slider.offsetLeft - start.X);
+    slider.scrollTop = scroll.top - (e.pageY - slider.offsetTop - start.Y);
+  });
 }
