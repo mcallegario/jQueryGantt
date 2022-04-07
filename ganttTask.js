@@ -25,11 +25,8 @@
  * A method to instantiate valid task models from
  * raw data.
  */
-function TaskFactory() {
+/* function TaskFactory() {
 
-  /**
-   * Build a new Task
-   */
   this.build = function (id, name, code, level, start, duration, collapsed) {
     // Set at beginning of day
     var adjusted_start = computeStart(start);
@@ -37,7 +34,7 @@ function TaskFactory() {
     return new Task(id, name, code, level, adjusted_start, calculated_end, duration, collapsed);
   };
 
-}
+} */
 
 function Task(id, name, code, level, start, end, duration, collapsed) {
   this.id = id;
@@ -68,6 +65,8 @@ function Task(id, name, code, level, start, end, duration, collapsed) {
   this.canAdd = true;
   this.canDelete = true;
   this.canAddIssue = true;
+  this.canUpdateParent = true;
+  this.canUpdateDate = true;
 
   this.rowElement; //row editor html element
   this.ganttElement; //gantt html element
@@ -88,6 +87,21 @@ Task.prototype.clone = function () {
     }
   return ret; 
 };
+
+
+Task.prototype.getAssigsSelect = function () {
+  var ret = $(`<select multiple="multiple" name="resources">`);
+  for (var i = 0; i < this.master.resources.length; i++) {
+    var res = this.master.resources[i];
+    var taskRes = this.assigs.findIndex((val)=>val.id==res.id);
+    ret.append($("<option "+(taskRes>=0?"selected='selected'":"")+" ></option>")
+      .attr("value",res.id)
+      .text(res.name));
+  }
+  return ret?ret[0].outerHTML:'';
+};
+
+
 
 Task.prototype.getAssigsString = function () {
   var ret = "";
@@ -189,7 +203,7 @@ Task.prototype.setPeriod = function (start, end) {
     return true;
 
   //cannot write exit
-  if (!this.canWrite) {
+  if (!this.canWrite && !this.canUpdateDate) {
     this.master.setErrorOnTransaction("\"" + this.name + "\"\n" + GanttMaster.messages["CANNOT_WRITE"], this);
     return false;
   }
@@ -360,7 +374,7 @@ Task.prototype.propagateToInferiors = function (end) {
   if (infs && infs.length > 0) {
     for (var i = 0; i < infs.length; i++) {
       var link = infs[i];
-      if (!link.to.canWrite) {
+      if (!link.to.canWrite && !link.to.canUpdateDate) {
         this.master.setErrorOnTransaction(GanttMaster.messages["CANNOT_WRITE"] + "\n\"" + link.to.name + "\"", link.to);
         break;
       }
@@ -394,12 +408,13 @@ function updateTree(task) {
   //console.debug("updateTree ",task.code,task.name, new Date(task.start), new Date(task.end));
   var error;
 
+  if(!task.canUpdateParent) return true;
+
   //try to enlarge parent
   var p = task.getParent();
 
   //no parent:exit
-  if (!p)
-    return true;
+  if (!p) return true;
 
   var newStart;
   var newEnd;
@@ -442,7 +457,7 @@ function updateTree(task) {
   if (newStart != p.start || newEnd != p.end) {
 
     //can write?
-    if (!p.canWrite) {
+    if (!p.canWrite && !p.canUpdateDate) {
       task.master.setErrorOnTransaction(GanttMaster.messages["CANNOT_WRITE"] + "\n" + p.name, task);
       return false;
     }
@@ -529,15 +544,15 @@ Task.prototype.changeStatus = function (newStatus,forceStatusCheck) {
       if ((manuallyChanged || oldStatus != "STATUS_FAILED")) { //cannot set failed task as closed for cascade - only if changed manually
 
         //can be closed only if superiors are already done
-        var sups = task.getSuperiors();
+        /* var sups = task.getSuperiors();
         for (var i = 0; i < sups.length; i++) {
-          if (sups[i].from.status != "STATUS_DONE" && cone.indexOf(sups[i].from)<0) { // è un errore se un predecessore è non chiuso ed è fuori dal cono
+          if (sups[i].from.status != "STATUS_DONE" && cone.indexOf(sups[i].from)<0) { // É um erro se um predecessor não estiver fechado e está fora do cone
             if (manuallyChanged || propagateFromParent)  //genere un errore bloccante se è cambiato a mano o se il cambiamento arriva dal parent ed ho una dipendenza fuori dal cono (altrimenti avrei un attivo figlio di un chiuso
               task.master.setErrorOnTransaction(GanttMaster.messages["GANTT_ERROR_DEPENDS_ON_OPEN_TASK"] + "\n\"" + sups[i].from.name + "\" -> \"" + task.name + "\"");
             todoOk = false;
             break;
           }
-        }
+        } */
 
         if (todoOk) {
           // set progress to 100% if needed by settings
@@ -568,14 +583,14 @@ Task.prototype.changeStatus = function (newStatus,forceStatusCheck) {
         //can be active only if superiors are already done, not only on this task, but also on ancestors superiors
         var sups = task.getSuperiors();
 
-        for (var i = 0; i < sups.length; i++) {
+        /* for (var i = 0; i < sups.length; i++) {
           if (sups[i].from.status != "STATUS_DONE") {
             if (manuallyChanged || propagateFromChildren)
               task.master.setErrorOnTransaction(GanttMaster.messages["GANTT_ERROR_DEPENDS_ON_OPEN_TASK"] + "\n\"" + sups[i].from.name + "\" -> \"" + task.name + "\"");
             todoOk = false;
             break;
           }
-        }
+        } */
 
         // check if parent is already active
         if (todoOk) {

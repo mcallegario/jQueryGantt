@@ -4,9 +4,9 @@
     min-width: 0px;
 }
 
-td.gdfCell input{
+/* td.gdfCell input{
     color: #333;
-}
+} */
 
 .ganttSVGBox svg:not(:root) {
     overflow: initial; 
@@ -14,4 +14,16 @@ td.gdfCell input{
 
 .taskLinkPathSVG:hover {
     stroke: rgb(0 70 198);
+}
+
+
+.ganttButtonBar .buttons button{
+    margin: 3px;
+}
+
+td.gdfCell input[readonly] {
+    color: #8c8c8c!important;
+}
+tr.taskEditRow.readonly {
+    color: #8c8c8c!important;
 }

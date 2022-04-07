@@ -235,7 +235,7 @@ Ganttalendar.prototype.drawTask = function (task) {
   if (self.showCriticalPath && task.isCritical)
     taskBox.addClass("critical");
 
-  if (this.master.permissions.canWrite || task.canWrite) {
+  if (this.master.permissions.canWrite && task.canWrite) {
 
     //bind all events on taskBox
     taskBox
@@ -274,8 +274,8 @@ Ganttalendar.prototype.drawTask = function (task) {
         var task = self.master.getTask($(this).attr("taskid"));
         task.rowElement.click();
       }).dragExtedSVG($(self.svg.root()), {
-        canResize:  this.master.permissions.canWrite || task.canWrite,
-        canDrag:    !task.depends && (this.master.permissions.canWrite || task.canWrite),
+        canResize:  this.master.permissions.canWrite && task.canWrite,
+        canDrag:    !task.depends && (this.master.permissions.canWrite && task.canWrite),
         resizeZoneWidth:self.resizeZoneWidth,
         startDrag:  function (e) {
           $(".ganttSVGBox .focused").removeClass("focused");
@@ -480,27 +480,33 @@ Ganttalendar.prototype.drawTask = function (task) {
 
 		//tooltip
 		var label = "<b>" + task.name + "</b>";
-		label += "<br>";
-		label += "@" + new Date(self.master.baselineMillis).format();
+		if(self.master.baselineMillis){ 
+      label += "<br>";
+      label += "Linha de Base: " + new Date(self.master.baselineMillis).format();
+    }
+		if(baseline.status){ 
+      label += "<br><br>";
+      label += "<b>Status:</b> " + baseline.status;
+    }
 		label += "<br><br>";
-		label += "<b>Status:</b> " + baseline.status;
-		label += "<br><br>";
-		label += "<b>Start:</b> " + new Date(baseline.startDate).format();
+		label += "<b>Inicio:</b> " + new Date(baseline.startDate).format();
 		label += "<br>";
-		label += "<b>End:</b> " + new Date(baseline.endDate).format();
+		label += "<b>Término:</b> " + new Date(baseline.endDate).format();
 		label += "<br>";
-		label += "<b>Duration:</b> " + baseline.duration;
+		label += "<b>Duração:</b> " + baseline.duration + ' dia(s)';
 		label += "<br>";
-		label += "<b>Progress:</b> " + baseline.progress + "%";
+		label += "<b>Concluído:</b> " + baseline.progress + "%";
 
 		$(taskSvg).attr("data-label", label).on("click", function (event) {
-			showBaselineInfo(event, this);
+      if (typeof self.master.showBaselineInfo =="function")	self.master.showBaselineInfo(event, this);
 			//bind hide
 		});
 
 		//external box
 		var layout = svg.rect(taskSvg, 0, 0, "100%", "100%", {class: "taskLayout", rx: "2", ry: "2"});
 
+    const tooltip = `<title>${label.replaceAll('<br>','\n')}</title>`;
+    layout.innerHTML = tooltip;
 
 		//progress
 
@@ -659,7 +665,7 @@ Ganttalendar.prototype.drawLink = function (from, to, type) {
   }
 
   // in order to create a dependency you will need permissions on both tasks
-  if (this.master.permissions.canWrite || ( from.canWrite && to.canWrite)) {
+  if (this.master.permissions.canWrite && ( from.canWrite && to.canWrite)) {
     link.click(function (e) {
       var el = $(this);
       e.stopPropagation();// to avoid body remove focused
@@ -890,6 +896,13 @@ Ganttalendar.prototype.goToMillis= function (millis) {
 
 Ganttalendar.prototype.centerOnToday = function () {
   this.goToMillis(new Date().getTime());
+};
+
+Ganttalendar.prototype.centerOnProject = function () {
+  if(this.master.tasks[0]){
+    const firstTask = this.master.tasks[0];
+    this.goToMillis(firstTask.start+(firstTask.end-firstTask.start)/2);
+  }
 };
 
 /*

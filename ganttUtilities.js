@@ -604,28 +604,43 @@ function goToPage(url) {
   window.location.href = url;
 }
 
+ function showMessageGantt(msg) {
+  $.alert(msg.replaceAll('\n','<br>'));
+}
+
 function horizontalScrollingOnMouse(selector){
   const slider = document.querySelector(selector);
   let isDown = false;
   let start={};
   let scroll={};
+  let cntrlIsPressed = false;
+
+  document.addEventListener("keydown", e => {
+		if(event.which=="17") cntrlIsPressed = true;//Ctrl press
+  });
+  document.addEventListener("keyup", e => {
+	  cntrlIsPressed = false;
+  });
 
   slider.addEventListener("mousedown", e => {
+    if (!cntrlIsPressed) return;
     isDown = true;
     //slider.classList.add("activeScrollingMouse");
     start = {X:e.pageX - slider.offsetLeft,Y:e.pageY - slider.offsetTop}; 
     scroll = {left:slider.scrollLeft,top:slider.scrollTop};
   });
   slider.addEventListener("mouseleave", () => {
+    if (!cntrlIsPressed) return;
     isDown = false;
     //slider.classList.remove("activeScrollingMouse");
   });
   slider.addEventListener("mouseup", () => {
+    if (!cntrlIsPressed) return;
     isDown = false;
     //slider.classList.remove("activeScrollingMouse");
   });
   slider.addEventListener("mousemove", e => {
-    if (!isDown) return;
+    if ((!isDown) ||(!cntrlIsPressed)) return;
     e.preventDefault();
     slider.scrollLeft = scroll.left - (e.pageX - slider.offsetLeft - start.X);
     slider.scrollTop = scroll.top - (e.pageY - slider.offsetTop - start.Y);

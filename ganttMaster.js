@@ -21,6 +21,8 @@
  WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 function GanttMaster() {
+  var self = this;
+
   this.tasks = [];
   this.deletedTaskIds = [];
   this.links = [];
@@ -52,6 +54,7 @@ function GanttMaster() {
   this.rowBufferSize=5;
   this.firstVisibleTaskIndex=-1; //index of first task visible
   this.lastVisibleTaskIndex=-1; //index of last task visible
+  this.openGanttCenterOnToday=false;
 
   this.baselines={}; // contains {taskId:{taskId,start,end,status,progress}}
   this.showBaselines=false; //allows to draw baselines
@@ -61,7 +64,8 @@ function GanttMaster() {
   this.onAfterTaskChange=null;
   this.onAfterFieldBlur=null;
   this.onAfterRowChange=null;
-
+  this.showBaselineInfo=null;
+  this.onBeforeCreateTask=null;
 
   this.permissions = {
     canWriteOnParent: true,
@@ -92,7 +96,6 @@ function GanttMaster() {
 
   Date.workingPeriodResolution=1; //by default 1 day
 
-  var self = this;
 }
 
 
@@ -298,10 +301,17 @@ GanttMaster.messages = {
   "CANNOT_CREATE_SAME_LINK":               "CANNOT_CREATE_SAME_LINK"
 };
 
+GanttMaster.prototype.buildTask = function (id, name, code, level, start, duration, collapsed) {
+  // Set at beginning of day
+  var adjusted_start = computeStart(start);
+  var calculated_end = computeEndByDuration(adjusted_start, duration);
+  let newTask = new Task(id, name, code, level, adjusted_start, calculated_end, duration, collapsed);
+  if (typeof this.onBeforeCreateTask == "function") newTask = this.onBeforeCreateTask(newTask,this);
+  return newTask;
+};
 
 GanttMaster.prototype.createTask = function (id, name, code, level, start, duration) {
-  var factory = new TaskFactory();
-  return factory.build(id, name, code, level, start, duration);
+  return this.buildTask(id, name, code, level, start, duration);
 };
 
 
@@ -337,7 +347,7 @@ GanttMaster.prototype.updateDependsStrings = function () {
 
 GanttMaster.prototype.removeLink = function (fromTask, toTask) {
   //console.debug("removeLink");
-  if (!this.permissions.canWrite || (!fromTask.canWrite && !toTask.canWrite))
+  if (!this.permissions.canWrite && (!fromTask.canWrite && !toTask.canWrite))
     return;
 
   this.beginTransaction(toTask);
@@ -497,14 +507,16 @@ GanttMaster.prototype.loadProject = function (project) {
 
   this.endTransaction();
   var self = this;
-  this.gantt.element.oneTime(200, function () {self.gantt.centerOnToday()});
+  this.gantt.element.oneTime(200, function () {
+    if(self.openGanttCenterOnToday) self.gantt.centerOnToday();
+    else self.gantt.centerOnProject();
+  });
 };
 
 
 GanttMaster.prototype.loadTasks = function (tasks, selectedRow) {
   //console.debug("GanttMaster.prototype.loadTasks")
   //var prof=new Profiler("ganttMaster.loadTasks");
-  var factory = new TaskFactory();
 
   //reset
   this.reset();
@@ -512,7 +524,7 @@ GanttMaster.prototype.loadTasks = function (tasks, selectedRow) {
   for (var i = 0; i < tasks.length; i++) {
     var task = tasks[i];
     if (!(task instanceof Task)) {
-      var t = factory.build(task.id, task.name, task.code, task.level, task.start, task.duration, task.collapsed);
+      var t = this.buildTask(task.id, task.name, task.code, task.level, task.start, task.duration, task.collapsed);
       for (var key in task) {
         if (key != "end" && key != "start")
           t[key] = task[key]; //copy all properties
@@ -529,20 +541,20 @@ GanttMaster.prototype.loadTasks = function (tasks, selectedRow) {
 
     var numOfError = this.__currentTransaction && this.__currentTransaction.errors ? this.__currentTransaction.errors.length : 0;
     //add Link collection in memory
-    while (!this.updateLinks(task)) {  // error on update links while loading can be considered as "warning". Can be displayed and removed in order to let transaction commits.
+    while (!this.updateLinks(task)) {  // Erro em links de atualização durante o carregamento pode ser considerado como "Aviso".Pode ser exibido e removido para permitir que transações commits.
       if (this.__currentTransaction && numOfError != this.__currentTransaction.errors.length) {
-        var msg = "ERROR:\n";
+        var msg = "ATENÇÃO!\n";
         while (numOfError < this.__currentTransaction.errors.length) {
           var err = this.__currentTransaction.errors.pop();
           msg = msg + err.msg + "\n\n";
         }
-        alert(msg);
+        showMessageGantt(msg);
       }
       this.__removeAllLinks(task, false);
     }
 
     if (!task.setPeriod(task.start, task.end)) {
-      alert(GanttMaster.messages.GANNT_ERROR_LOADING_DATA_TASK_REMOVED + "\n" + task.name );
+      showMessageGantt(GanttMaster.messages.GANNT_ERROR_LOADING_DATA_TASK_REMOVED + "\n" + task.name );
       //remove task from in-memory collection
       this.tasks.splice(task.getRow(), 1);
     } else {
@@ -626,7 +638,7 @@ GanttMaster.prototype.moveTask = function (task, newStart) {
 GanttMaster.prototype.taskIsChanged = function (task) {
   //console.debug("taskIsChanged");
   var master = this;
-
+  if(task) task.changed = true;
   //refresh is executed only once every 50ms
   this.element.stopTime("gnnttaskIsChanged");
   //var profilerext = new Profiler("gm_taskIsChangedRequest");
@@ -638,7 +650,7 @@ GanttMaster.prototype.taskIsChanged = function (task) {
     //profiler.stop();
   });
   //profilerext.stop();
-  if (typeof master.onAfterTaskChange=="function") master.onAfterTaskChange(task,master);
+  if (task && typeof master.onAfterTaskChange=="function") master.onAfterTaskChange(task,master);
 };
 
 
@@ -989,7 +1001,7 @@ GanttMaster.prototype.moveUpCurrentTask = function () {
   var self = this;
   //console.debug("moveUpCurrentTask",self.currentTask)
   if (self.currentTask) {
-    if (!(self.permissions.canWrite  || self.currentTask.canWrite) || !self.permissions.canMoveUpDown )
+    if (!(self.permissions.canWrite  && self.currentTask.canWrite) || !self.permissions.canMoveUpDown )
     return;
 
     self.beginTransaction(self.currentTask);
@@ -1002,7 +1014,7 @@ GanttMaster.prototype.moveDownCurrentTask = function () {
   var self = this;
   //console.debug("moveDownCurrentTask",self.currentTask)
   if (self.currentTask) {
-    if (!(self.permissions.canWrite  || self.currentTask.canWrite) || !self.permissions.canMoveUpDown )
+    if (!(self.permissions.canWrite  && self.currentTask.canWrite) || !self.permissions.canMoveUpDown )
     return;
 
     self.beginTransaction(self.currentTask);
@@ -1046,7 +1058,6 @@ GanttMaster.prototype.indentCurrentTask = function () {
 GanttMaster.prototype.addBelowCurrentTask = function () {
   var self = this;
   //console.debug("addBelowCurrentTask",self.currentTask)
-  var factory = new TaskFactory();
   var ch;
   var row = 0;
   if (self.currentTask && self.currentTask.name) {
@@ -1063,7 +1074,7 @@ GanttMaster.prototype.addBelowCurrentTask = function () {
         return;
 
 
-    ch = factory.build("tmp_" + new Date().getTime(), "", "", self.currentTask.level+ (addNewBrother ?0:1), self.currentTask.start, 1);
+    ch = self.buildTask("tmp_" + new Date().getTime(), "", "", self.currentTask.level+ (addNewBrother ?0:1), self.currentTask.start, 1);
     row = self.currentTask.getRow() + 1;
 
     if (row>0) {
@@ -1086,8 +1097,6 @@ GanttMaster.prototype.addAboveCurrentTask = function () {
   if ((self.currentTask.getParent() && !self.currentTask.getParent().canAdd) )
     return;
 
-  var factory = new TaskFactory();
-
   var ch;
   var row = 0;
   if (self.currentTask  && self.currentTask.name) {
@@ -1095,7 +1104,7 @@ GanttMaster.prototype.addAboveCurrentTask = function () {
     if (self.currentTask.level <= 0)
       return;
 
-    ch = factory.build("tmp_" + new Date().getTime(), "", "", self.currentTask.level, self.currentTask.start, 1);
+    ch = self.buildTask("tmp_" + new Date().getTime(), "", "", self.currentTask.level, self.currentTask.start, 1);
     row = self.currentTask.getRow();
 
     if (row > 0) {
@@ -1257,7 +1266,7 @@ GanttMaster.prototype.addIssue = function () {
   var self = this;
 
   if (self.currentTask && self.currentTask.isNew()){
-    alert(GanttMaster.messages.PLEASE_SAVE_PROJECT);
+    showMessageGantt(GanttMaster.messages.PLEASE_SAVE_PROJECT);
     return;
   }
   if (!self.currentTask || !self.currentTask.canAddIssue)
@@ -1273,7 +1282,7 @@ GanttMaster.prototype.openExternalEditor = function () {
     return;
 
   if (self.currentTask.isNew()){
-    alert(GanttMaster.messages.PLEASE_SAVE_PROJECT);
+    showMessageGantt(GanttMaster.messages.PLEASE_SAVE_PROJECT);
     return;
   }
 
@@ -1341,12 +1350,12 @@ GanttMaster.prototype.endTransaction = function (task) {
     //console.debug("rolling-back transaction");
 
     //compose error message
-    var msg = "ERROR:\n";
+    var msg = "ATENÇÃO!\n";
     for (var i = 0; i < this.__currentTransaction.errors.length; i++) {
       var err = this.__currentTransaction.errors[i];
       msg = msg + err.msg + "\n\n";
     }
-    alert(msg);
+    showMessageGantt(msg);
 
 
     //try to restore changed tasks

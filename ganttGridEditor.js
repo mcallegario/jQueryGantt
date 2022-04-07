@@ -41,7 +41,6 @@ function GridEditor(master) {
 
 GridEditor.prototype.fillEmptyLines = function () {
   //console.debug("fillEmptyLines")
-  var factory = new TaskFactory();
   var master = this.master;
 
   //console.debug("GridEditor.fillEmptyLines");
@@ -73,14 +72,15 @@ GridEditor.prototype.fillEmptyLines = function () {
       var level = 0;
       if (master.tasks[0]) {
         start = master.tasks[0].start;
-        level = master.tasks[0].level + 1;
+        //level = master.tasks[0].level + 1;
+        level = master.tasks[master.tasks.length-1].level
       }
 
       //fill all empty previouses
       var cnt=0;
       emptyRow.prevAll(".emptyRow").addBack().each(function () {
         cnt++;
-        var ch = factory.build("tmp_fk" + new Date().getTime()+"_"+cnt, "", "", level, start, Date.workingPeriodResolution);
+        var ch = master.buildTask("tmp_fk" + new Date().getTime()+"_"+cnt, "", "", level, start, Date.workingPeriodResolution);
         var task = master.addTask(ch);
         lastTask = ch;
       });
@@ -167,7 +167,7 @@ GridEditor.prototype.refreshTaskRow = function (task) {
   //console.debug("refreshTaskRow")
   //var profiler = new Profiler("editorRefreshTaskRow");
 
-  var canWrite=this.master.permissions.canWrite || task.canWrite;
+  var canWrite=this.master.permissions.canWrite && task.canWrite;
 
   var row = task.rowElement;
 
@@ -219,7 +219,7 @@ GridEditor.prototype.reset = function () {
 
 GridEditor.prototype.bindRowEvents = function (task, taskRow) {
   var self = this;
-  var lastTaskIdEventClick;
+  //var lastTaskIdEventClick;
   //console.debug("bindRowEvents",this,this.master,this.master.permissions.canWrite, task.canWrite);
 
   //bind row selection
@@ -227,10 +227,10 @@ GridEditor.prototype.bindRowEvents = function (task, taskRow) {
     var row = $(this);
     //console.debug("taskRow.click",row.attr("taskid"),event.target)
 
-    if (lastTaskIdEventClick==row.attr("taskid")){
-      return;
+    /* if (lastTaskIdEventClick==row.attr("taskid")){
+      //return;
     }
-    lastTaskIdEventClick = row.attr("taskid");
+    lastTaskIdEventClick = row.attr("taskid"); */
     //var isSel = row.hasClass("rowSelected");
     row.closest("table").find(".rowSelected").removeClass("rowSelected");
     row.addClass("rowSelected");
@@ -261,12 +261,14 @@ GridEditor.prototype.bindRowEvents = function (task, taskRow) {
   });
 
 
-  if (this.master.permissions.canWrite || task.canWrite) {
+  if (this.master.permissions.canWrite && task.canWrite) {
     self.bindRowInputEvents(task, taskRow);
+    taskRow.removeClass('readonly');
 
   } else { //cannot write: disable input
     taskRow.find("input").prop("readonly", true);
     taskRow.find("input:checkbox,select").prop("disabled", true);
+    taskRow.addClass('readonly');
   }
 
   if (!this.master.permissions.canSeeDep)
@@ -307,8 +309,8 @@ GridEditor.prototype.bindRowInputEvents = function (task, taskRow) {
 
   function afterFieldBlur(param){
     if ( typeof self.master.onAfterFieldBlur == "function") self.master.onAfterFieldBlur(param);
-    let rowChange = (typeof self.master.currentTask.changed=="undefined")?false:(self.master.currentTask.changed);
-    self.master.currentTask.changed = (rowChange||param.isValueChanged);
+    let rowChange = (typeof self.master.currentTask?.changed=="undefined")?false:(self.master.currentTask?.changed);
+    if (self.master.currentTask) self.master.currentTask.changed = (rowChange||param.isValueChanged);
     /* if ( typeof self.master.onAfterRowChange == "function"){
       setTimeout(()=>{
         if (param.task.id!=self.master.currentTask.id){
@@ -347,7 +349,7 @@ GridEditor.prototype.bindRowInputEvents = function (task, taskRow) {
       var isValueChanged = inp.isValueChanged();
       if (isValueChanged) {
         if (!Date.isValid(inp.val())) {
-          alert(GanttMaster.messages["INVALID_DATE_FORMAT"]);
+          showMessageGantt(GanttMaster.messages["INVALID_DATE_FORMAT"]);
           inp.val(inp.getOldValue());
           return;
         } else {
@@ -627,7 +629,7 @@ GridEditor.prototype.openFullEditor = function (task, editOnlyAssig) {
   var startDate = taskEditor.find("#start");
   startDate.val(new Date(task.start).format());
   //start is readonly in case of deps
-  if (task.depends || !(this.master.permissions.canWrite ||task.canWrite)) {
+  if (task.depends || !(this.master.permissions.canWrite && task.canWrite)) {
     startDate.attr("readonly", "true");
   } else {
     startDate.removeAttr("readonly");
@@ -647,7 +649,7 @@ GridEditor.prototype.openFullEditor = function (task, editOnlyAssig) {
 
   taskEditor.find(":input").updateOldValue();
 
-  if (!(self.master.permissions.canWrite || task.canWrite)) {
+  if (!(self.master.permissions.canWrite && task.canWrite)) {
     taskEditor.find("input,textarea").prop("readOnly", true);
     taskEditor.find("input:checkbox,select").prop("disabled", true);
     taskEditor.find("#saveButton").remove();
